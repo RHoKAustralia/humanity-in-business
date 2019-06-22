@@ -1,5 +1,4 @@
 var restify = require('restify');
-require('./db');
 
 const UserService = require('./src/services/UserService');
 
@@ -7,19 +6,21 @@ const userService = new UserService();
 
 const PORT = process.env.PORT || 8080
 
-function respond(req, res, next) {
-  const response = userService.respond(req.params.name);
+const respond = async (req, res, next) => {
+  const response = await userService.respond(req.params.name);
   res.send(response);
   next();
 }
 
-function login(req, res, next) {
-  res.send('login ' + userService.login('username', 'password'));
+const login = async (req, res, next) => {
+  const response = await userService.login('username', 'password');
+  res.send('login ' + response);
   next();
 }
 
-function register(req, res, next) {
-  res.send('register ' + userService.register({username: 'test'}));
+const register = async (req, res, next) => {
+  const response = await userService.register({username: 'test'});
+  res.send('register ' + response);
   next();
 }
 
