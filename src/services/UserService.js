@@ -40,6 +40,10 @@ class UserService {
         
         return 'User registered';
     }
+
+    getProfile(profileId) {
+        return 'TG';
+    }
 }
 
 module.exports = UserService;

@@ -24,17 +24,26 @@ const register = async (req, res, next) => {
   next();
 }
 
+const getProfile = async (req, res, next) => {
+  console.log(req.params.profileId);
+  const response = await userService.getProfile(req.params.profileId);
+  res.send(response);
+  next();
+}
+
+
 var server = restify.createServer();
 server.get('/hello/:name', respond);
-server.head('/hello/:name', respond);
 
 // Login
 server.post('/login', login);
-server.head('/login', login);
 
 // Register
 server.post('/register', register);
-server.head('/register', register);
+
+// Profile Page
+server.get('/profile/:profileId', getProfile);
+
 
 server.listen(PORT, function() {
   console.log('%s listening at %s', server.name, server.url);
