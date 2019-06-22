@@ -1,9 +1,9 @@
 require('../../db');
 
-class UserService {
-    respond(message) {
+class CompanyService {
+    getCompany(companyId) {
         return new Promise((resolve, reject) => {
-            db.query('SELECT 1 + 1 AS solution', (error, result) => {
+            db.query('SELECT * from companies WHERE id = ?', [companyId], (error, result) => {
                 if (error) {
                     console.log('Something went wrong with db connection: ' + error);
                     reject(new Error(error));
@@ -12,38 +12,30 @@ class UserService {
                 console.log('Success! Database connection established.');
                 console.log(result);
                 resolve(result);
-                //process.exit()
             });
         });
-        // return `hello ${message}`;
     }
 
-    login(username, password) {
-        console.log(`${username} ${password}`);
-
+    getAllCompanies() {
         return new Promise((resolve, reject) => {
-            db.query('SELECT 1 + 1 AS solution', (error, result) => {
+            db.query('SELECT * from companies', (error, result) => {
                 if (error) {
                     console.log('Something went wrong with db connection: ' + error);
                     reject(new Error(error));
                     return;
                 }
                 console.log('Success! Database connection established.');
+                console.log(result);
                 resolve(result);
-                //process.exit()
             });
         });
     }
 
-    register(userData) {
+    insert(companyData) {
         return new Promise((resolve, reject) => {
-            db.query('INSERT INTO users SET ?', {
-                full_name: userData.full_name,
-                email: userData.email,
-                password: userData.password,
-                title: userData.title,
-                image_url: userData.image_url,
-                company_id: userData.company_id,
+            db.query('INSERT INTO companies SET ?', {
+                name: companyData.name,
+                url: companyData.url,
             }, function (error, results, fields) {
                 if (error) {
                     return reject(Error(error));
@@ -52,6 +44,7 @@ class UserService {
             });
         });
     }
+
 }
 
-module.exports = UserService;
+module.exports = CompanyService;
