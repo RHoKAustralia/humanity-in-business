@@ -1,0 +1,27 @@
+{
+  "name": "humanity-in-business",
+  "version": "1.0.0",
+  "description": "RHok Sydney",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "mysql": "^2.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RHoKAustralia/humanity-in-business.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RHoKAustralia/humanity-in-business/issues"
+  },
+  "homepage": "https://github.com/RHoKAustralia/humanity-in-business#readme"
+}
