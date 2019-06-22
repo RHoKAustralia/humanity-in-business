@@ -1,8 +1,10 @@
-const UserService = require('../src/services/UserService');
-const CompanyService = require('../src/services/CompanyService');
+const UserService       = require('../src/services/UserService');
+const CompanyService    = require('../src/services/CompanyService');
+const SDGService        = require('../src/services/SDGService'); 
 
-const userService = new UserService();
-const companyService = new CompanyService();
+const userService       = new UserService();
+const companyService    = new CompanyService();
+const SDGService        = new SDGService();
 
 var UserController = require('../controllers/UserController');
 
@@ -88,4 +90,8 @@ module.exports = function (server, restify) {
 
     // Profile Page
     server.get('/profile/:profileId', getProfile);
+
+    // SDG Endpoints
+    server.get('/sdg', getSDG());
+    server.get('/sdg/{id}', getSDGById());
 }

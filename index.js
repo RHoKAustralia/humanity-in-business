@@ -1,5 +1,8 @@
 var restify = require('restify');
 
+/**
+ * Server config
+ */
 const PORT = process.env.PORT || 8080
 
 var server = restify.createServer();
