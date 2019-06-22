@@ -11,7 +11,7 @@ class UserService {
                 }
                 console.log('Success! Database connection established.');
                 console.log(result);
-                resolve(result);
+                resolve(`response: ${JSON.stringify(result)}`);
                 //process.exit()
             });
         });
