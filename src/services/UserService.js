@@ -3,13 +3,13 @@ class UserService {
         return `hello ${message}`;
     }
 
-    login = function(username, password) {
+    login(username, password) {
         console.log(`${username} ${password}`);
         
         return true;
     }
 
-    register = function(userData) {
+    register(userData) {
         console.log(userData);
         
         return 'User registered';
