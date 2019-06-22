@@ -1,20 +1,19 @@
 class UserService {
-    respond(req, res, next) {
-        res.send('hello ' + req.params.name);
-        next();
+    respond(message) {
+        return `hello ${message}`;
     }
 
-    login(req, res, next) {
-        console.log(req);
-        res.send('hello ' + req.params.name);
-        next();
+    login = function(username, password) {
+        console.log(`${username} ${password}`);
+        
+        return true;
     }
 
-    register(req, res, next) {
-        console.log(req);
-        res.send('hello ' + req.params.name);
-        next();
+    register = function(userData) {
+        console.log(userData);
+        
+        return 'User registered';
     }
 }
 
-export default UserService;
+module.exports = UserService;
