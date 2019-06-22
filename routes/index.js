@@ -65,6 +65,13 @@ module.exports = function (server, restify) {
         next();
     }
 
+    const getProfile = async (req, res, next) => {
+        const response = await userService.getProfile(req.params.profileId);
+        res.send(response);
+        next();
+    }
+
+
     // Test
     server.get('/hello/:name', respond);
 
@@ -79,4 +86,6 @@ module.exports = function (server, restify) {
     server.get('/company', getAllCompanies);
     server.post('/company', postCompany);
 
+    // Profile Page
+    server.get('/profile/:profileId', getProfile);
 }

@@ -54,6 +54,28 @@ class UserService {
             });
         });
     }
+
+    getProfile(profileId) {
+        return new Promise((resolve, reject) => {
+            db.query('select u.full_name, u.email, u.title, u.image_url, c.name as company_name, c.url, c.image_url ' +
+                'from users u join companies c on u.company_id = c.id where u.id =  ?',
+                [profileId]
+                , function (error, result) {
+                    if (error) {
+                        reject(new Error(error));
+                        return;
+                    }
+
+                    if (!result) {
+                        return resolve(false);
+                    }
+
+                    return resolve(result[0]);
+                });
+
+
+        });
+    }
 }
 
 module.exports = UserService;
