@@ -4,17 +4,13 @@ const CompanyService = require('../src/services/CompanyService');
 const userService = new UserService();
 const companyService = new CompanyService();
 
+var UserController = require('../controllers/UserController');
+
 module.exports = function (server, restify) {
 
     const respond = async (req, res, next) => {
         const response = await userService.respond(req.params.name);
         res.send(response);
-        next();
-    }
-
-    const login = async (req, res, next) => {
-        const response = await userService.login('username', 'password');
-        res.send('login ' + response);
         next();
     }
 
@@ -73,7 +69,7 @@ module.exports = function (server, restify) {
     server.get('/hello/:name', respond);
 
     // Login
-    server.post('/login', login);
+    server.post('/login', UserController.login);
 
     // Register
     server.post('/register', register);
