@@ -18,19 +18,21 @@ class UserService {
         // return `hello ${message}`;
     }
 
-    login(username, password) {
-        console.log(`${username} ${password}`);
-
+    login(email, encryptedPassword) {
         return new Promise((resolve, reject) => {
-            db.query('SELECT 1 + 1 AS solution', (error, result) => {
+            db.query('SELECT * FROM users WHERE email = ? AND password = ?',
+                [email, encryptedPassword]
+            , function (error, result) {
                 if (error) {
-                    console.log('Something went wrong with db connection: ' + error);
                     reject(new Error(error));
                     return;
                 }
-                console.log('Success! Database connection established.');
-                resolve(result);
-                //process.exit()
+
+                if (typeof result !== 'undefined' && result.length > 0) {
+                    return resolve(true);
+                } else {
+                    return resolve(false);
+                }
             });
         });
     }
