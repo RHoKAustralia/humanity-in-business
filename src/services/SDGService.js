@@ -17,3 +17,5 @@ class SDGService{
         });
      }
 }
+
+module.exports = SDGService;

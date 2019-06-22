@@ -4,7 +4,7 @@ const SDGService        = require('../src/services/SDGService');
 
 const userService       = new UserService();
 const companyService    = new CompanyService();
-const SDGService        = new SDGService();
+const sdgService        = new SDGService();
 
 var UserController = require('../controllers/UserController');
 
@@ -74,6 +74,8 @@ module.exports = function (server, restify) {
     }
 
 
+
+
     // Test
     server.get('/hello/:name', respond);
 
@@ -92,6 +94,6 @@ module.exports = function (server, restify) {
     server.get('/profile/:profileId', getProfile);
 
     // SDG Endpoints
-    server.get('/sdg', getSDG());
-    server.get('/sdg/{id}', getSDGById());
+    // server.get('/sdg', getSDG());
+    // server.get('/sdg/{id}', getSDGById());
 }
