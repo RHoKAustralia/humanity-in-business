@@ -72,6 +72,24 @@ module.exports = function (server, restify) {
         next();
     }
 
+    const getCompanyLeaderBoard = async (req, res, next) => {
+        const response = await companyService.getCompanyLeaderBoard(req.params.id);
+        res.send({ response: response });
+        next();
+    }
+
+    const getCompanyBadges = async (req, res, next) => {
+        const response = await companyService.getBadges(req.params.id);
+        res.send({ response: response });
+        next();
+    }
+
+    const getCompanySDGs = async (req, res, next) => {
+        const response = await companyService.getSDGs(req.params.id);
+        res.send({ response: response });
+        next();
+    }
+
     const getProfile = async (req, res, next) => {
         const response = await userService.getProfile(req.params.profileId);
         res.send(response);
@@ -125,6 +143,18 @@ module.exports = function (server, restify) {
         next();
     }
 
+    const getUpcomingChallenges = async (req, res, next) => {
+        const response = await userService.getUpcomingChallenges(req.params.userId);
+        res.send(response);
+        next();
+    };
+
+    const getCompletedChallenges = async (req, res, next) => {
+        const response = await userService.getCompletedChallenges(req.params.userId);
+        res.send(response);
+        next();
+    };
+
     const getAllSkills = async (req, res, next) => {
         const response = await skillService.getAllSkills();
         res.send({ response: response });
@@ -144,6 +174,9 @@ module.exports = function (server, restify) {
     server.get('/company/:id', getCompany);
     server.get('/company', getAllCompanies);
     server.post('/company', postCompany);
+    server.get('/leaderboard/company/:id', getCompanyLeaderBoard);
+    server.get('/badges/company/:id', getCompanyBadges);
+    server.get('/sdgs/company/:id', getCompanySDGs);
 
     // Profile Page
     server.get('/profile/:profileId', getProfile);
@@ -154,10 +187,11 @@ module.exports = function (server, restify) {
 
     // Challenge Endpoint
     server.post('/addChallengeToUser', addChallengeToUser);
-    server.get('/challenge/:challengeId', getChallenge)
+    server.get('/challenge/:challengeId', getChallenge);
+    server.get('/challenges/upcoming/:userId', getUpcomingChallenges);
+    server.get('/challenges/completed/:userId', getCompletedChallenges);
 
     // Skills Endpoint
     server.get('/skills', getAllSkills);
-
 
 }
