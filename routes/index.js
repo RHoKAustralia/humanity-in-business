@@ -2,11 +2,13 @@ const UserService       = require('../src/services/UserService');
 const CompanyService    = require('../src/services/CompanyService');
 const SDGService        = require('../src/services/SDGService'); 
 const ChallengeService  = require('../src/services/ChallengeService');
+const SkillService      = require('../src/services/SkillService');
 
 const userService       = new UserService();
 const companyService    = new CompanyService();
 const sdgService        = new SDGService();
 const challengeService  = new ChallengeService();
+const skillService      = new SkillService();
 
 var UserController = require('../controllers/UserController');
 
@@ -134,7 +136,19 @@ module.exports = function (server, restify) {
 
         next();
     }
-    
+
+    const getChallenge = async (req, res, next) => {
+        const response = await challengeService.getChallenge(req.params.challengeId);
+        res.send(response);
+        next();
+    }
+
+    const getAllSkills = async (req, res, next) => {
+        const response = await skillService.getAllSkills();
+        res.send({ response: response });
+        next();
+    }
+
     // Test
     server.get('/hello/:name', respond);
 
@@ -161,5 +175,10 @@ module.exports = function (server, restify) {
 
     // Challenge Endpoint
     server.post('/addChallengeToUser', addChallengeToUser);
+    server.get('/challenge/:challengeId', getChallenge)
+
+    // Skills Endpoint
+    server.get('/skills', getAllSkills);
+
 
 }
