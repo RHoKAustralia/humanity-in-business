@@ -134,13 +134,10 @@ class UserService {
         return new Promise((resolve, reject) => {
             const sql = `SELECT distinct(c.id), c.title, c.description, c.challenge_date, c.points
                         FROM users u
-                        INNER JOIN user_skills us ON us.user_id = u.id
-                        INNER JOIN user_sdgs usdgs ON usdgs.user_id = u.id
-                        INNER JOIN skill_challenges sc ON sc.skill_id = us.skill_id
-                        INNER JOIN sdg_challenges sch ON sch.sdg_id = usdgs.sdg_id
-                        INNER JOIN challenges c ON c.id = sc.challenge_id
                         INNER JOIN user_challenges uc ON uc.user_id = u.id
-                        WHERE uc.completed = 1`;
+                        INNER JOIN challenges c ON c.id = uc.challenge_id
+                        WHERE uc.completed = 1
+                        ORDER BY c.challenge_date DESC`;
 
             db.query(sql, [userId]
                 , function (error, result) {
