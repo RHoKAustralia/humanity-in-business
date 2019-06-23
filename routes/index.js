@@ -149,6 +149,12 @@ module.exports = function (server, restify) {
         next();
     };
 
+    const getCompletedChallenges = async (req, res, next) => {
+        const response = await userService.getCompletedChallenges(req.params.userId);
+        res.send(response);
+        next();
+    };
+
     const getAllSkills = async (req, res, next) => {
         const response = await skillService.getAllSkills();
         res.send({ response: response });
@@ -183,6 +189,7 @@ module.exports = function (server, restify) {
     server.post('/addChallengeToUser', addChallengeToUser);
     server.get('/challenge/:challengeId', getChallenge);
     server.get('/challenges/upcoming/:userId', getUpcomingChallenges);
+    server.get('/challenges/completed/:userId', getCompletedChallenges);
 
     // Skills Endpoint
     server.get('/skills', getAllSkills);
