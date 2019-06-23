@@ -110,7 +110,7 @@ class UserService {
 
     getUpcomingChallenges(userId) {
         return new Promise((resolve, reject) => {
-            const sql = `SELECT distinct(c.id), c.title, c.description, c.challenge_date, c.points
+            const sql = `SELECT distinct(c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
                         FROM users u
                         INNER JOIN user_skills us ON us.user_id = u.id
                         INNER JOIN user_sdgs usdgs ON usdgs.user_id = u.id
@@ -132,7 +132,7 @@ class UserService {
 
     getCompletedChallenges(userId) {
         return new Promise((resolve, reject) => {
-            const sql = `SELECT distinct(c.id), c.title, c.description, c.challenge_date, c.points
+            const sql = `SELECT distinct(c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
                         FROM users u
                         INNER JOIN user_challenges uc ON uc.user_id = u.id
                         INNER JOIN challenges c ON c.id = uc.challenge_id
