@@ -1,10 +1,12 @@
 const UserService       = require('../src/services/UserService');
 const CompanyService    = require('../src/services/CompanyService');
 const SDGService        = require('../src/services/SDGService'); 
+const ChallengeService  = require('../src/services/ChallengeService');
 
 const userService       = new UserService();
 const companyService    = new CompanyService();
 const sdgService        = new SDGService();
+const challengeService  = new ChallengeService();
 
 var UserController = require('../controllers/UserController');
 
@@ -79,6 +81,41 @@ module.exports = function (server, restify) {
         res.send(response);
         next();
     }
+
+    const addSDG = async (req, res, next) => {
+        if (req && req.body) {
+            const sdgData = {
+                user_id: req.body.user_id || 1,
+                sdg_ids: req.body.sdg_ids || []
+            };
+
+            const response = await sdgService.addSDG(sdgData);
+
+            res.send({ response: response});
+        } else {
+            res.send(400, { response: `Invalid request:  ${JSON.stringify(req.body)}` });
+        }
+
+        next();
+
+    }
+
+    const addChallengeToUser = async (req, res, next) => {
+        if (req && req.body) {
+            const challengeData = {
+                user_id: req.body.user_id || 1,
+                challenge_id: req.body.challenge_id || 1
+            };
+
+            const response = await challengeService.addChallengeToUser(challengeData);
+
+            res.send({ response: response});
+        } else {
+            res.send(400, { response: `Invalid request:  ${JSON.stringify(req.body)}` });
+        }
+
+        next();
+    }
     
     // Test
     server.get('/hello/:name', respond);
@@ -99,4 +136,9 @@ module.exports = function (server, restify) {
 
     // SDG Endpoints
     server.get('/sdg/:sdgId', getSDG);
+    server.post('/addSDG', addSDG);
+
+    // Challenge Endpoint
+    server.post('/addChallengeToUser', addChallengeToUser);
+
 }
