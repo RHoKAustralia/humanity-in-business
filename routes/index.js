@@ -25,6 +25,7 @@ module.exports = function (server, restify) {
                 title: req.body.title || 'Default title',
                 image_url: req.body.image_url || 'Default image URL',
                 company_id: req.body.company_id || 1,
+                skills: req.body.skills || []
             };
 
             const response = await userService.register(userData);

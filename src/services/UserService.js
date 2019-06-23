@@ -37,7 +37,15 @@ class UserService {
         });
     }
 
-    register(userData) {
+    async register(userData) {
+        const newUserId = await this.addUser(userData);
+
+        const response = await this.addUserSkills(newUserId, userData.skills);
+
+        return newUserId;
+    }
+
+    async addUser(userData) {
         return new Promise((resolve, reject) => {
             db.query('INSERT INTO users SET ?', {
                 full_name: userData.full_name,
@@ -47,6 +55,27 @@ class UserService {
                 image_url: userData.image_url,
                 company_id: userData.company_id,
             }, function (error, results, fields) {
+                if (error) {
+                    return reject(Error(error));
+                }
+                return resolve(results.insertId);
+            });
+        });
+    }
+
+    async addUserSkills(userId, skills) {
+        // TODO. Get skills IDs from skills table
+
+        return new Promise((resolve, reject) => {
+            const sql = 'INSERT INTO user_skills (user_id, skill_id) VALUES ?';
+
+            const values = [];
+
+            for ( let i = 0; i < skills.length; i++ ) {
+                values.push([userId, skills[i]]);
+            }
+            
+            db.query(sql, [values], function (error, results, fields) {
                 if (error) {
                     return reject(Error(error));
                 }
