@@ -42,7 +42,9 @@ class UserService {
     async register(userData) {
         const newUserId = await this.addUser(userData);
 
-        const response = await this.addUserSkills(newUserId, userData.skills);
+        if ( userData.skills && userData.skills.length > 0 ) {
+            response = await this.addUserSkills(newUserId, userData.skills);
+        }
 
         return newUserId;
     }
