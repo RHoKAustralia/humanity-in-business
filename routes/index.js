@@ -73,9 +73,12 @@ module.exports = function (server, restify) {
         next();
     }
 
-
-
-
+    const getSDG = async (req, res, next) => {
+        const response = await sdgService.getSDG(req.params.sdgId);
+        res.send(response);
+        next();
+    }
+    
     // Test
     server.get('/hello/:name', respond);
 
@@ -94,6 +97,5 @@ module.exports = function (server, restify) {
     server.get('/profile/:profileId', getProfile);
 
     // SDG Endpoints
-    // server.get('/sdg', getSDG());
-    // server.get('/sdg/{id}', getSDGById());
+    server.get('/sdg/:sdgId', getSDG);
 }

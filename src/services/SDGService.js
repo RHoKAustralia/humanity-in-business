@@ -4,16 +4,23 @@ class SDGService{
     /**
      * Get list of sdg's
      */
-     async getSDG(id = null) {
+    getSDG(id = '') {
         let query = 'SELECT * FROM `sdgs`';
-        if(id !== null) {
+        if(id !== '') {
             query = query + ' WHERE `id` = ' + id;
         }
-        await db.query(query, (error, results) => {
-            if(error) {
-                console.log(error);
-            }
-            console.log(results);
+
+        return new Promise((resolve, reject) => {
+            db.query(query, (error, result) => {
+                if (error) {
+                    console.log('Something went wrong with db connection: ' + error);
+                    reject(new Error(error));
+                    return;
+                }
+                console.log('Success! Results are as follows:');
+                console.log(result);
+                resolve(result);
+            });
         });
      }
 }
