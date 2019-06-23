@@ -1,4 +1,6 @@
+var md5 = require('md5');
 require('../../db');
+
 
 class UserService {
     respond(message) {
@@ -20,7 +22,7 @@ class UserService {
 
     login(email, encryptedPassword) {
         return new Promise((resolve, reject) => {
-            db.query('SELECT * FROM users WHERE email = ? AND password = ?',
+            db.query('SELECT id FROM users WHERE email = ? AND password = ?',
                 [email, encryptedPassword]
             , function (error, result) {
                 if (error) {
@@ -29,7 +31,7 @@ class UserService {
                 }
 
                 if (typeof result !== 'undefined' && result.length > 0) {
-                    return resolve(true);
+                    return resolve(result[0].id);
                 } else {
                     return resolve(false);
                 }
@@ -50,7 +52,7 @@ class UserService {
             db.query('INSERT INTO users SET ?', {
                 full_name: userData.full_name,
                 email: userData.email,
-                password: userData.password,
+                password: md5(userData.password),
                 title: userData.title,
                 image_url: userData.image_url,
                 company_id: userData.company_id,
