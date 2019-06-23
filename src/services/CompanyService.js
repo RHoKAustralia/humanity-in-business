@@ -51,7 +51,7 @@ class CompanyService {
 
     async getCompanyLeaderBoard(companyId) {
         return new Promise((resolve, reject) => {
-            const sql = `SELECT u.full_name AS name, SUM(c.points) AS points
+            const sql = `SELECT u.full_name AS name, SUM(c.points) AS points, u.title
                             FROM hib.users u
                             INNER JOIN user_challenges uc ON u.id = uc.user_id
                             INNER JOIN challenges c ON uc.challenge_id = c.id

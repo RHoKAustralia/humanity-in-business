@@ -143,6 +143,12 @@ module.exports = function (server, restify) {
         next();
     }
 
+    const getUpcomingChallenges = async (req, res, next) => {
+        const response = await userService.getUpcomingChallenges(req.params.userId);
+        res.send(response);
+        next();
+    };
+
     const getAllSkills = async (req, res, next) => {
         const response = await skillService.getAllSkills();
         res.send({ response: response });
@@ -175,10 +181,10 @@ module.exports = function (server, restify) {
 
     // Challenge Endpoint
     server.post('/addChallengeToUser', addChallengeToUser);
-    server.get('/challenge/:challengeId', getChallenge)
+    server.get('/challenge/:challengeId', getChallenge);
+    server.get('/challenges/upcoming/:userId', getUpcomingChallenges);
 
     // Skills Endpoint
     server.get('/skills', getAllSkills);
-
 
 }
