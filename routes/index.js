@@ -32,9 +32,12 @@ module.exports = function (server, restify) {
                 skills: req.body.skills || []
             };
 
-            const response = await userService.register(userData);
-
-            res.send({ response: `Response: ${response}` });
+            try {
+                const response = await userService.register(userData);
+                res.send({ response: `Response: ${response}` });    
+            } catch(error) {
+                next(error)
+            }
         } else {
             res.send(400, { response: `Invalid request:  ${JSON.stringify(req.body)}` });
         }
