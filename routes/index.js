@@ -160,7 +160,7 @@ module.exports = function (server, restify) {
 
     const getAllSkills = async (req, res, next) => {
         const response = await skillService.getAllSkills();
-        res.send({ response: response });
+        res.send(response);
         next();
     }
 
