@@ -40,10 +40,18 @@ class UserService {
     }
 
     async register(userData) {
-        const newUserId = await this.addUser(userData);
+        const newUserId = await this.addUser(userData)
+            .catch(error => {
+                console.log(error)
+                throw new Error('Failed to register user')
+            });
 
         if ( userData.skills && userData.skills.length > 0 ) {
-            response = await this.addUserSkills(newUserId, userData.skills);
+            response = await this.addUserSkills(newUserId, userData.skills)
+                .catch(error => {
+                    console.log(error)
+                    throw new Error('Failed to add skills after user registration')
+                });
         }
 
         return newUserId;
