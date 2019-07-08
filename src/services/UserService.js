@@ -5,7 +5,7 @@ require('../../db');
 class UserService {
     respond(message) {
         return new Promise((resolve, reject) => {
-            db.query('SELECT 1 + 1 AS solution', (error, result) => {
+            db.query('SELECT 1 + 1 AS solution',[], (error, result) => {
                 if (error) {
                     console.log('Something went wrong with db connection: ' + error);
                     reject(new Error(error));
@@ -59,7 +59,7 @@ class UserService {
 
     async addUser(userData) {
         return new Promise((resolve, reject) => {
-            db.query('INSERT INTO users SET ?', {
+            db.query('INSERT INTO users () VALUES ?', {
                 full_name: userData.full_name,
                 email: userData.email,
                 password: md5(userData.password),

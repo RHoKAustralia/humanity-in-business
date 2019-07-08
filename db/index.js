@@ -12,17 +12,57 @@
 
 // global.db = db;
 
-const { Client } = require('pg');
+const {Client} = require('pg');
 
 const dotenv = require('dotenv');
 dotenv.config({path: '.env'});
 
-console.log('DB_URL'+ process.env.DB_URL)
 const client = new Client({
-  connectionString: process.env.DB_URL,
-  ssl: true,
+    connectionString: process.env.DB_URL,
+    ssl: true,
 });
 
-client.connect();
+//client.connect()
 
-global.db = client;
+global.db = {
+    query: function(query, values, callback) {
+        const client = new Client({
+            connectionString: process.env.DB_URL,
+            ssl: true,
+        });
+        client.connect()
+            .then(() => {
+                const statement = getStatement(query, values)
+                console.log(statement)
+                console.log(callback)
+                client.query(statement.query, statement.values, function (err, res) {
+                    try {
+                        callback(err, res)
+                    } finally {
+                        client.end()
+                    }
+                })
+            })
+    }
+}
+
+function getStatement(query, values) {
+    if (!Array.isArray(values)) {
+        const colNames = Object.keys(values)
+            .reduce((acc, value) => `${acc}, ${value}`)
+
+        const valuesClause = Object.keys(values)
+            .map(s => '?')
+            .reduce((acc, value) => `${acc}, ${value}`)
+        return {
+            query: query
+                .replace('()', `(${colNames})`)
+                .replace('?', `(${valuesClause})`),
+            values: Object.values(values)
+        }
+    } else
+        return {
+            query: query,
+            values: values
+        }
+}
