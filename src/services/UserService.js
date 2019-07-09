@@ -47,7 +47,7 @@ class UserService {
             });
 
         if ( userData.skills && userData.skills.length > 0 ) {
-            response = await this.addUserSkills(newUserId, userData.skills)
+            await this.addUserSkills(newUserId, userData.skills)
                 .catch(error => {
                     console.log(error)
                     throw new Error('Failed to add skills after user registration')
@@ -59,19 +59,20 @@ class UserService {
 
     async addUser(userData) {
         return new Promise((resolve, reject) => {
-            db.query('INSERT INTO users () VALUES ?', {
-                full_name: userData.full_name,
-                email: userData.email,
-                password: md5(userData.password),
-                title: userData.title,
-                image_url: userData.image_url,
-                company_id: userData.company_id,
-            }, function (error, results, fields) {
-                if (error) {
-                    return reject(Error(error));
-                }
-                return resolve(results.insertId);
-            });
+            db.query('INSERT INTO users (full_name, email, password, title, image_url, company_id) VALUES ($1, $2, $3, $4, $5, $6)'
+                + ' RETURNING id',
+                [userData.full_name,
+                userData.email,
+                md5(userData.password),
+                userData.title,
+                userData.image_url,
+                userData.company_id],
+                function (error, results) {
+                    if (error) {
+                        return reject(Error(error));
+                    }
+                    return resolve(results.rows[0].id);
+                });
         });
     }
 
@@ -87,7 +88,7 @@ class UserService {
                 values.push([userId, skills[i]]);
             }
             
-            db.query(sql, [values], function (error, results, fields) {
+            db.query(sql, [values], function (error, results) {
                 if (error) {
                     return reject(Error(error));
                 }
