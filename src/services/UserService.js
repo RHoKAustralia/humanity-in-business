@@ -22,18 +22,19 @@ class UserService {
 
     login(email, encryptedPassword) {
         return new Promise((resolve, reject) => {
-            db.query('SELECT id FROM users WHERE email = ? AND password = ?',
+            db.query('SELECT id FROM users WHERE email = $1 AND password = $2',
                 [email, encryptedPassword]
             , function (error, result) {
                 if (error) {
-                    reject(new Error(error));
+                    console.log(error);
+                    reject(new Error('Failed to login user'));
                     return;
                 }
 
-                if (typeof result !== 'undefined' && result.length > 0) {
-                    return resolve(result[0].id);
+                if (result.rowCount > 0) {
+                    return resolve({id: result.rows[0].id});
                 } else {
-                    return resolve(false);
+                    return resolve({})
                 }
             });
         });
