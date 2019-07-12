@@ -42,7 +42,7 @@ class UserService {
     async register(userData) {
         const newUserId = await this.addUser(userData)
             .catch(error => {
-                console.log(error)
+                console.log(error);
                 throw new Error('Failed to register user')
             });
 
@@ -71,7 +71,7 @@ class UserService {
                     if (error) {
                         return reject(Error(error));
                     }
-                    return resolve(results.rows[0].id);
+                    return resolve({id: results.rows[0].id});
                 });
         });
     }

@@ -34,7 +34,7 @@ module.exports = function (server, restify) {
 
             try {
                 const response = await userService.register(userData);
-                res.send({ response: `Response: ${response}` });    
+                res.send(response);
             } catch(error) {
                 next(error)
             }
