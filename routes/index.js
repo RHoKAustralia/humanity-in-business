@@ -1,14 +1,14 @@
-const UserService       = require('../src/services/UserService');
-const CompanyService    = require('../src/services/CompanyService');
-const SDGService        = require('../src/services/SDGService'); 
-const ChallengeService  = require('../src/services/ChallengeService');
-const SkillService      = require('../src/services/SkillService');
+const UserService = require('../src/services/UserService');
+const CompanyService = require('../src/services/CompanyService');
+const SDGService = require('../src/services/SDGService');
+const ChallengeService = require('../src/services/ChallengeService');
+const SkillService = require('../src/services/SkillService');
 
-const userService       = new UserService();
-const companyService    = new CompanyService();
-const sdgService        = new SDGService();
-const challengeService  = new ChallengeService();
-const skillService      = new SkillService();
+const userService = new UserService();
+const companyService = new CompanyService();
+const sdgService = new SDGService();
+const challengeService = new ChallengeService();
+const skillService = new SkillService();
 
 var UserController = require('../controllers/UserController');
 
@@ -35,11 +35,12 @@ module.exports = function (server, restify) {
             try {
                 const response = await userService.register(userData);
                 res.send(response);
-            } catch(error) {
+            } catch (error) {
+                //TODO: Return Http 409 on user exists with same email
                 next(error)
             }
         } else {
-            res.send(400, { response: `Invalid request:  ${JSON.stringify(req.body)}` });
+            res.send(400, {response: `Invalid request:  ${JSON.stringify(req.body)}`});
         }
 
         next();
@@ -48,7 +49,7 @@ module.exports = function (server, restify) {
     // Companies
     const getCompany = async (req, res, next) => {
         const response = await companyService.getCompany(req.params.id);
-        res.send({ response: response });
+        res.send({response: response});
         next();
     }
 
@@ -61,9 +62,9 @@ module.exports = function (server, restify) {
 
             const response = await companyService.insert(companyData);
 
-            res.send({ response: `Response: ${response}` });
+            res.send({response: `Response: ${response}`});
         } else {
-            res.send(400, { response: `Invalid request:  ${JSON.stringify(req.body)}` });
+            res.send(400, {response: `Invalid request:  ${JSON.stringify(req.body)}`});
         }
 
         next();
@@ -71,25 +72,25 @@ module.exports = function (server, restify) {
 
     const getAllCompanies = async (req, res, next) => {
         const response = await companyService.getAllCompanies();
-        res.send({ response: response });
+        res.send({response: response});
         next();
     }
 
     const getCompanyLeaderBoard = async (req, res, next) => {
         const response = await companyService.getCompanyLeaderBoard(req.params.id);
-        res.send({ response: response });
+        res.send({response: response});
         next();
     }
 
     const getCompanyBadges = async (req, res, next) => {
         const response = await companyService.getBadges(req.params.id);
-        res.send({ response: response });
+        res.send({response: response});
         next();
     }
 
     const getCompanySDGs = async (req, res, next) => {
         const response = await companyService.getSDGs(req.params.id);
-        res.send({ response: response });
+        res.send({response: response});
         next();
     }
 
@@ -105,24 +106,6 @@ module.exports = function (server, restify) {
         next();
     }
 
-    const addSDG = async (req, res, next) => {
-        if (req && req.body) {
-            const sdgData = {
-                user_id: req.body.user_id || 1,
-                sdg_ids: req.body.sdg_ids || []
-            };
-
-            const response = await sdgService.addSDG(sdgData);
-
-            res.send({ response: response});
-        } else {
-            res.send(400, { response: `Invalid request:  ${JSON.stringify(req.body)}` });
-        }
-
-        next();
-
-    }
-
     const addChallengeToUser = async (req, res, next) => {
         if (req && req.body) {
             const challengeData = {
@@ -132,9 +115,9 @@ module.exports = function (server, restify) {
 
             const response = await challengeService.addChallengeToUser(challengeData);
 
-            res.send({ response: response});
+            res.send({response: response});
         } else {
-            res.send(400, { response: `Invalid request:  ${JSON.stringify(req.body)}` });
+            res.send(400, {response: `Invalid request:  ${JSON.stringify(req.body)}`});
         }
 
         next();
@@ -164,6 +147,8 @@ module.exports = function (server, restify) {
         next();
     }
 
+    //TODO: Protect all endpoints except login with an Authorization token
+
     // Test
     server.get('/hello/:name', respond);
 
@@ -172,6 +157,7 @@ module.exports = function (server, restify) {
 
     // Register
     server.post('/register', register);
+    server.post('/user/:userId/sdg', UserController.addSDGs);
 
     // Companies
     server.get('/company/:id', getCompany);
@@ -186,7 +172,6 @@ module.exports = function (server, restify) {
 
     // SDG Endpoints
     server.get('/sdg/:sdgId', getSDG);
-    server.post('/addSDG', addSDG);
 
     // Challenge Endpoint
     server.post('/addChallengeToUser', addChallengeToUser);
