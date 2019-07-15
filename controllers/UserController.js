@@ -50,3 +50,14 @@ exports.addSDGs = async (req, res, next) => {
     next();
 }
 
+exports.getProfile = async (req, res, next) => {
+    try {
+        const response = await userService.getProfile(req.params.profileId);
+        res.send(response);
+    } catch (error) {
+        console.log(error);
+        next(error)
+    }
+    next();
+}
+

@@ -98,38 +98,30 @@ class UserService {
         });
     }
 
-    getProfile(profileId) {
-        return new Promise((resolve, reject) => {
-            db.query('select u.full_name, u.email, u.title, u.image_url, c.id as company_id, c.name as company_name,  ' +
-                'c.url, c.image_url from users u join companies c on u.company_id = c.id where u.id =  ?',
-                [profileId]
-                , function (error, result) {
-                    if (error) {
-                        reject(new Error(error));
-                        return;
-                    }
-                    let profile = result[0];
-                    profile['total_points'] = 0;
+    async getProfile(profileId) {
+        try {
+            const {rows} = await db.query('select u.full_name, u.email, u.title, u.image_url, c.id as company_id, c.name as company_name,  ' +
+                'c.url, c.image_url from users u join companies c on u.company_id = c.id where u.id =  $1',
+                [profileId]);
+            const profile = rows[0]
 
-                    db.query('select SUM(ch.points) as total_points from users u left join user_challenges uc on u.id = uc.user_id left join challenges ch on ch.id = uc.challenge_id where u.id = ? and uc.completed = 1 group by u.id;',
-                        [profileId]
-                        , function (error, result) {
-                            if (error || result[0].total_points == '') {
-                                profile['total_points'] = 0;
-                            }
-                            else {
-                                // Now that we have a user, let's get related challenges, but divide them into completed and not completed
-                                profile['total_points'] = result[0].total_points;
-                                console.log(profile);
-                            }
-                            return resolve(profile);
-
-                        });
-
-                });
-
-
-        });
+            try {
+                const {rows} = await db.query('select SUM(ch.points) as total_points from users u left join user_challenges uc on u.id = uc.user_id left join challenges ch on ch.id = uc.challenge_id where u.id = $1 and uc.completed = 1 group by u.id;',
+                    [profileId]);
+                if (rows.length > 0) {
+                    profile.total_points = rows[0].total_points
+                } else {
+                    profile.total_points = 0
+                }
+            } catch (error) {
+                console.log(error)
+                profile.total_points = 0
+            }
+            return profile
+        } catch (error) {
+            console.log(error)
+            throw  Error('Failed to get profile')
+        }
     }
 
     getUpcomingChallenges(userId) {
