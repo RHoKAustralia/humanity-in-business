@@ -94,12 +94,6 @@ module.exports = function (server, restify) {
         next();
     }
 
-    const getProfile = async (req, res, next) => {
-        const response = await userService.getProfile(req.params.profileId);
-        res.send(response);
-        next();
-    }
-
     const getSDG = async (req, res, next) => {
         const response = await sdgService.getSDG(req.params.sdgId);
         res.send(response);
@@ -168,7 +162,7 @@ module.exports = function (server, restify) {
     server.get('/sdgs/company/:id', getCompanySDGs);
 
     // Profile Page
-    server.get('/profile/:profileId', getProfile);
+    server.get('/profile/:profileId', UserController.getProfile);
 
     // SDG Endpoints
     server.get('/sdg/:sdgId', getSDG);
