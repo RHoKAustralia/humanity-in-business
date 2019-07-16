@@ -44,6 +44,7 @@ class UserService {
         const newUserId = await this.addUser(userData)
             .catch(error => {
                 console.log(error);
+                //TODO: Handle error code 23505 detail: 'Key (email)=(newEmail) already exists.'
                 throw new Error('Failed to register user')
             });
 
@@ -55,47 +56,30 @@ class UserService {
                 });
         }
 
-        return newUserId;
+        return {id: newUserId};
     }
 
     async addUser(userData) {
-        return new Promise((resolve, reject) => {
-            db.query('INSERT INTO users (full_name, email, password, title, image_url, company_id) VALUES ($1, $2, $3, $4, $5, $6)'
-                + ' RETURNING id',
-                [userData.full_name,
-                    userData.email,
-                    md5(userData.password),
-                    userData.title,
-                    userData.image_url,
-                    userData.company_id],
-                function (error, results) {
-                    if (error) {
-                        return reject(Error(error));
-                    }
-                    return resolve({id: results.rows[0].id});
-                });
-        });
+        const {rows} = await db.query('INSERT INTO users (full_name, email, password, title, image_url, company_id) VALUES ($1, $2, $3, $4, $5, $6)'
+            + ' RETURNING id',
+            [userData.full_name,
+                userData.email,
+                md5(userData.password),
+                userData.title,
+                userData.image_url,
+                userData.company_id]);
+        return rows[0].id
     }
 
     async addUserSkills(userId, skills) {
         // TODO. Get skills IDs from skills table
-
-        return new Promise((resolve, reject) => {
-            const sql = 'INSERT INTO user_skills (user_id, skill_id) VALUES ?';
-
-            const values = [];
-
-            for (let i = 0; i < skills.length; i++) {
-                values.push([userId, skills[i]]);
-            }
-
-            db.query(sql, [values], function (error, results) {
-                if (error) {
-                    return reject(Error(error));
-                }
-                return resolve(results.insertId);
-            });
-        });
+        const values = [userId].concat(skills);
+        const userSkillClause = skills.map((skill, index) => `($1, $${index + 2})`)
+            .reduce((acc, current) => `${acc}, ${current}`);
+        const sql = `INSERT INTO user_skills (user_id, skill_id) VALUES ${userSkillClause}`;
+        console.log(sql)
+        console.log(values)
+        await db.query(sql, values)
     }
 
     async getProfile(profileId) {
