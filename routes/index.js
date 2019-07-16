@@ -12,6 +12,8 @@ const skillService = new SkillService();
 
 var UserController = require('../controllers/UserController');
 
+const errs = require('restify-errors');
+
 module.exports = function (server, restify) {
 
     const respond = async (req, res, next) => {
@@ -40,7 +42,7 @@ module.exports = function (server, restify) {
                 next(error)
             }
         } else {
-            res.send(400, {response: `Invalid request:  ${JSON.stringify(req.body)}`});
+            next(new errs.BadRequestError('Invalid request'));
         }
 
         next();
@@ -48,96 +50,158 @@ module.exports = function (server, restify) {
 
     // Companies
     const getCompany = async (req, res, next) => {
-        const response = await companyService.getCompany(req.params.id);
-        res.send({response: response});
+        try {
+            const response = await companyService.getCompany(req.params.id);
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+
         next();
     }
 
     const postCompany = async (req, res, next) => {
         if (req && req.body) {
-            const companyData = {
-                name: req.body.name || 'Default name',
-                url: req.body.url || 'Default URL',
-            };
+            try {
+                const companyData = {
+                    name: req.body.name || 'Default name',
+                    url: req.body.url || 'Default URL',
+                };
 
-            const response = await companyService.insert(companyData);
+                const response = await companyService.insert(companyData);
+                res.send(response);
+            } catch (error) {
+                console.log(error)
+                next(error)
+            }
 
-            res.send({response: `Response: ${response}`});
         } else {
-            res.send(400, {response: `Invalid request:  ${JSON.stringify(req.body)}`});
+            next(new errs.BadRequestError('Invalid request'));
         }
 
         next();
     }
 
     const getAllCompanies = async (req, res, next) => {
-        const response = await companyService.getAllCompanies();
-        res.send({response: response});
+        try {
+            const response = await companyService.getAllCompanies();
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+
         next();
     }
 
     const getCompanyLeaderBoard = async (req, res, next) => {
-        const response = await companyService.getCompanyLeaderBoard(req.params.id);
-        res.send({response: response});
+        try {
+            const response = await companyService.getCompanyLeaderBoard(req.params.id);
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
         next();
     }
 
     const getCompanyBadges = async (req, res, next) => {
-        const response = await companyService.getBadges(req.params.id);
-        res.send({response: response});
+        try {
+            const response = await companyService.getBadges(req.params.id);
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
         next();
     }
 
     const getCompanySDGs = async (req, res, next) => {
-        const response = await companyService.getSDGs(req.params.id);
-        res.send({response: response});
+        try {
+            const response = await companyService.getSDGs(req.params.id);
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
         next();
     }
 
     const getSDG = async (req, res, next) => {
-        const response = await sdgService.getSDG(req.params.sdgId);
-        res.send(response);
+        try {
+            const response = await sdgService.getSDG(req.params.sdgId);
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
         next();
     }
 
     const addChallengeToUser = async (req, res, next) => {
         if (req && req.body) {
-            const challengeData = {
-                user_id: req.body.user_id || 1,
-                challenge_id: req.body.challenge_id || 1
-            };
+            try {
+                const challengeData = {
+                    user_id: req.body.user_id || 1,
+                    challenge_id: req.body.challenge_id || 1
+                };
 
-            const response = await challengeService.addChallengeToUser(challengeData);
-
-            res.send({response: response});
+                const response = await challengeService.addChallengeToUser(challengeData);
+                res.send(response);
+            } catch (error) {
+                console.log(error)
+                next(error)
+            }
         } else {
-            res.send(400, {response: `Invalid request:  ${JSON.stringify(req.body)}`});
+            next(new errs.BadRequestError('Invalid request'));
         }
 
         next();
     }
 
     const getChallenge = async (req, res, next) => {
-        const response = await challengeService.getChallenge(req.params.challengeId);
-        res.send(response);
+        try {
+            const response = await challengeService.getChallenge(req.params.challengeId);
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
         next();
     }
 
+
     const getUpcomingChallenges = async (req, res, next) => {
-        const response = await userService.getUpcomingChallenges(req.params.userId);
-        res.send(response);
+        try {
+            const response = await userService.getUpcomingChallenges(req.params.userId);
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
         next();
     };
 
     const getCompletedChallenges = async (req, res, next) => {
-        const response = await userService.getCompletedChallenges(req.params.userId);
-        res.send(response);
+        try {
+            const response = await userService.getCompletedChallenges(req.params.userId);
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
         next();
     };
 
     const getAllSkills = async (req, res, next) => {
-        const response = await skillService.getAllSkills();
-        res.send(response);
+        try {
+            const response = await skillService.getAllSkills();
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
         next();
     }
 
