@@ -41,10 +41,10 @@ exports.addSDGs = async (req, res, next) => {
                 next(error);
             }
         } else {
-            res.next(new restify.errors.BadRequestError('No SDG Found: Please provide at least one SDG'));
+            next(new errs.BadRequestError('No SDG Found: Please provide at least one SDG'));
         }
     } else {
-        res.next(new restify.errors.BadRequestError('Invalid request'));
+        next(new errs.BadRequestError('Invalid request'));
     }
 
     next();
