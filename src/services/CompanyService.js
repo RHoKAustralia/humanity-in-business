@@ -1,48 +1,45 @@
 require('../../db');
 
 class CompanyService {
-    getCompany(companyId) {
-        return new Promise((resolve, reject) => {
-            db.query('SELECT * from companies WHERE id = ?', [companyId], (error, result) => {
-                if (error) {
-                    console.log('Something went wrong with db connection: ' + error);
-                    reject(new Error(error));
-                    return;
-                }
-                console.log('Success! Database connection established.');
-                console.log(result);
-                resolve(result);
-            });
-        });
+
+    async getCompany(companyId) {
+        try {
+            const {rows} = await db.query('SELECT * from companies WHERE id = $1',
+                [companyId]);
+
+            if (rows.length > 0) {
+                return rows[0];
+            }
+
+            return false;
+        } catch (error) {
+            console.log(error)
+            throw  Error('Failed to get company')
+        }
     }
 
-    getAllCompanies() {
-        return new Promise((resolve, reject) => {
-            db.query('SELECT * from companies', (error, result) => {
-                if (error) {
-                    console.log('Something went wrong with db connection: ' + error);
-                    reject(new Error(error));
-                    return;
-                }
-                console.log('Success! Database connection established.');
-                console.log(result);
-                resolve(result);
-            });
-        });
+    async getAllCompanies() {
+        try {
+            const {rows} = await db.query('SELECT * from companies');
+
+            if (rows.length > 0) {
+                return rows;
+            } else {
+                return false;
+            }
+
+        } catch (error) {
+            console.log(error)
+            throw  Error('Failed to get all companies')
+        }
     }
 
-    insert(companyData) {
-        return new Promise((resolve, reject) => {
-            db.query('INSERT INTO companies SET ?', {
-                name: companyData.name,
-                url: companyData.url,
-            }, function (error, results, fields) {
-                if (error) {
-                    return reject(Error(error));
-                }
-                return resolve(results.insertId);
-            });
-        });
+    async insert(companyData) {
+        const {rows} = await db.query('INSERT INTO companies (name, url) VALUES ($1, $2)'
+            + ' RETURNING id',
+            [companyData.name,
+                companyData.url]);
+        return rows[0].id
     }
 
     async getCompanyData(companyId) {
@@ -50,66 +47,66 @@ class CompanyService {
     }
 
     async getCompanyLeaderBoard(companyId) {
-        return new Promise((resolve, reject) => {
-            const sql = `SELECT u.full_name AS name, SUM(c.points) AS points, u.title
-                            FROM hib.users u
-                            INNER JOIN user_challenges uc ON u.id = uc.user_id
-                            INNER JOIN challenges c ON uc.challenge_id = c.id
-                            WHERE company_id = ?
-                            AND uc.completed = 1
-                            GROUP BY u.id
-                            ORDER BY points DESC`;
+        try {
+            const {rows} = await db.query(`SELECT u.full_name AS name, SUM(c.points) AS points, u.title
+                FROM hib.users u INNER JOIN user_challenges uc ON u.id = uc.user_id
+                INNER JOIN challenges c ON uc.challenge_id = c.id WHERE company_id = $1 
+                AND uc.completed = 1 GROUP BY u.id ORDER BY points DESC`,
+                [companyId]);
 
-            db.query(sql, [companyId], (error, result) => {
-                if (error) {
-                    console.log('Something went wrong with db connection: ' + error);
-                    reject(new Error(error));
-                    return;
-                }
-                resolve(result);
-            });
-        });
+            if (rows.length > 0) {
+                return rows;
+            }
+
+            return false;
+        } catch (error) {
+            console.log(error)
+            throw  Error('Failed to get company leader board')
+        }
     }
 
-    getBadges(companyId) {
-        return new Promise((resolve, reject) => {
-            const sql = `SELECT DISTINCT(b.id), b.name
+    async getBadges(companyId) {
+        try {
+            const {rows} = await db.query(`SELECT DISTINCT(b.id), b.name
                             FROM challenges c
                             INNER JOIN challenge_badges cb ON cb.challenge_id = c.id
                             INNER JOIN badges b ON b.id = cb.badge_id
                             INNER JOIN user_challenges uc ON uc.challenge_id = c.id
                             INNER JOIN users u ON u.id = uc.user_id
                             WHERE u.company_id = ?
-                                AND uc.completed = 1`;
+                                AND uc.completed = $1`,
+                [companyId]);
 
-            db.query(sql, [companyId], (error, result) => {
-                if (error) {
-                    console.log('Something went wrong with db connection: ' + error);
-                    reject(new Error(error));
-                    return;
-                }
-                resolve(result);
-            });
-        });    
+            if (rows.length > 0) {
+                return rows;
+            }
+
+            return false;
+        } catch (error) {
+            console.log(error)
+            throw  Error('Failed to get company badges')
+        }
     }
 
-    getSDGs(companyId) {
-        return new Promise((resolve, reject) => {
-            const sql = `SELECT s.title
+
+    async getSDGs(companyId) {
+        try {
+            const {rows} = await db.query(`SELECT s.title
                         FROM hib.sdgs s
                         INNER JOIN user_sdgs us ON us.sdg_id = s.id
                         INNER JOIN users u ON u.id = us.user_id
-                        WHERE u.company_id = ?`;
+                        WHERE u.company_id = $1`,
+                [companyId]);
 
-            db.query(sql, [companyId], (error, result) => {
-                if (error) {
-                    console.log('Something went wrong with db connection: ' + error);
-                    reject(new Error(error));
-                    return;
-                }
-                resolve(result);
-            });
-        });                
+            if (rows.length > 0) {
+                return rows;
+            }
+
+            return false;
+        } catch (error) {
+            console.log(error)
+            throw  Error('Failed to get sdgs')
+        }
     }
 
 }

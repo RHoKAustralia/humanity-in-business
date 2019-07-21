@@ -108,26 +108,27 @@ class UserService {
         }
     }
 
-    getUpcomingChallenges(userId) {
-        return new Promise((resolve, reject) => {
-            const sql = `SELECT distinct (c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
+    async getUpcomingChallenges(userId) {
+        try {
+            const {rows} = await db.query(`SELECT distinct (c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
                          FROM users u
                                 INNER JOIN user_skills us ON us.user_id = u.id
                                 INNER JOIN user_sdgs usdgs ON usdgs.user_id = u.id
                                 INNER JOIN skill_challenges sc ON sc.skill_id = us.skill_id
                                 INNER JOIN sdg_challenges sch ON sch.sdg_id = usdgs.sdg_id
                                 INNER JOIN challenges c ON c.id = sc.challenge_id
-                         WHERE c.challenge_date > NOW()`;
+                         WHERE c.challenge_date > NOW() AND u.id = $1`,
+                [userId]);
 
-            db.query(sql, [userId]
-                , function (error, result) {
-                    if (error) {
-                        return reject(new Error(error));
-                    }
+            if (rows.length > 0) {
+                return rows;
+            }
 
-                    return resolve(result);
-                });
-        });
+            return false;
+        } catch (error) {
+            console.log(error)
+            throw  Error('Failed to get upcoming challenges')
+        }
     }
 
     getCompletedChallenges(userId) {
@@ -149,6 +150,29 @@ class UserService {
                 });
         });
     }
+
+    async getCompletedChallenges(userId) {
+        try {
+            const {rows} = await db.query(`SELECT distinct (c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
+                         FROM users u
+                                INNER JOIN user_challenges uc ON uc.user_id = u.id
+                                INNER JOIN challenges c ON c.id = uc.challenge_id
+                         WHERE uc.completed = 1
+                         AND u.ud = $1
+                         ORDER BY c.challenge_date DESC `,
+                [userId]);
+
+            if (rows.length > 0) {
+                return rows;
+            }
+
+            return false;
+        } catch (error) {
+            console.log(error)
+            throw  Error('Failed to get completed challenges')
+        }
+    }
+
 
     async addSDGs(user_id, sdg_ids) {
         const values = [user_id].concat(sdg_ids);
