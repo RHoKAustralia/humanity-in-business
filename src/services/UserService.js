@@ -131,25 +131,6 @@ class UserService {
         }
     }
 
-    getCompletedChallenges(userId) {
-        return new Promise((resolve, reject) => {
-            const sql = `SELECT distinct (c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
-                         FROM users u
-                                INNER JOIN user_challenges uc ON uc.user_id = u.id
-                                INNER JOIN challenges c ON c.id = uc.challenge_id
-                         WHERE uc.completed = 1
-                         ORDER BY c.challenge_date DESC`;
-
-            db.query(sql, [userId]
-                , function (error, result) {
-                    if (error) {
-                        return reject(new Error(error));
-                    }
-
-                    return resolve(result);
-                });
-        });
-    }
 
     async getCompletedChallenges(userId) {
         try {
@@ -158,7 +139,7 @@ class UserService {
                                 INNER JOIN user_challenges uc ON uc.user_id = u.id
                                 INNER JOIN challenges c ON c.id = uc.challenge_id
                          WHERE uc.completed = 1
-                         AND u.ud = $1
+                         AND u.id = $1
                          ORDER BY c.challenge_date DESC `,
                 [userId]);
 

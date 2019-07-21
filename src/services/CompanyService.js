@@ -49,7 +49,7 @@ class CompanyService {
     async getCompanyLeaderBoard(companyId) {
         try {
             const {rows} = await db.query(`SELECT u.full_name AS name, SUM(c.points) AS points, u.title
-                FROM hib.users u INNER JOIN user_challenges uc ON u.id = uc.user_id
+                FROM users u INNER JOIN user_challenges uc ON u.id = uc.user_id
                 INNER JOIN challenges c ON uc.challenge_id = c.id WHERE company_id = $1 
                 AND uc.completed = 1 GROUP BY u.id ORDER BY points DESC`,
                 [companyId]);
@@ -73,8 +73,8 @@ class CompanyService {
                             INNER JOIN badges b ON b.id = cb.badge_id
                             INNER JOIN user_challenges uc ON uc.challenge_id = c.id
                             INNER JOIN users u ON u.id = uc.user_id
-                            WHERE u.company_id = ?
-                                AND uc.completed = $1`,
+                            WHERE u.company_id = $1
+                                AND uc.completed = 1`,
                 [companyId]);
 
             if (rows.length > 0) {
@@ -92,7 +92,7 @@ class CompanyService {
     async getSDGs(companyId) {
         try {
             const {rows} = await db.query(`SELECT s.title
-                        FROM hib.sdgs s
+                        FROM sdgs s
                         INNER JOIN user_sdgs us ON us.sdg_id = s.id
                         INNER JOIN users u ON u.id = us.user_id
                         WHERE u.company_id = $1`,

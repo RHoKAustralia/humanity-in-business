@@ -7,10 +7,10 @@ class SDGService{
 
     async getSDG(id = '') {
         try {
-            let query = 'SELECT * FROM `sdgs`';
+            let query = 'SELECT * FROM sdgs';
 
             if(id !== '') {
-                query = query + ' WHERE `id` = ' + id;
+                query = query + ' WHERE id = ' + id;
             }
 
             const {rows} = await db.query(query);
@@ -23,7 +23,7 @@ class SDGService{
 
         } catch (error) {
             console.log(error)
-            throw  Error('Failed to get all sdgs')
+            throw  Error('Failed to get the sdg')
         }
     }
 }
