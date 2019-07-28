@@ -3,11 +3,11 @@ require('../../db');
 class ChallengeService{
 
     async addChallengeToUser(challengeData) {
-        const {rows} = await db.query('INSERT INTO companies (user_id, challenge_id) VALUES ($1, $2)'
+        const {rows} = await db.query('INSERT INTO user_challenges (user_id, challenge_id) VALUES ($1, $2)'
             + ' RETURNING id',
             [challengeData.user_id,
                 challengeData.challenge_id]);
-        return rows[0].id
+        return { id: rows[0].id }
     }
 
 

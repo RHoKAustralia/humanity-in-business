@@ -120,11 +120,7 @@ class UserService {
                          WHERE c.challenge_date > NOW() AND u.id = $1`,
                 [userId]);
 
-            if (rows.length > 0) {
-                return rows;
-            }
-
-            return false;
+            return rows;
         } catch (error) {
             console.log(error)
             throw  Error('Failed to get upcoming challenges')
@@ -161,8 +157,6 @@ class UserService {
             .reduce((acc, current) => `${acc}, ${current}`);
 
         let query = `INSERT INTO user_sdgs (user_id, sdg_id) VALUES ${sdgClause};`;
-        console.log(query);
-        console.log(values)
 
         await db.query(query, values)
     }

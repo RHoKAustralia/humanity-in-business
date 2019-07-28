@@ -22,11 +22,7 @@ class CompanyService {
         try {
             const {rows} = await db.query('SELECT * from companies');
 
-            if (rows.length > 0) {
-                return rows;
-            } else {
-                return false;
-            }
+            return rows;
 
         } catch (error) {
             console.log(error)
@@ -35,15 +31,12 @@ class CompanyService {
     }
 
     async insert(companyData) {
+
         const {rows} = await db.query('INSERT INTO companies (name, url) VALUES ($1, $2)'
             + ' RETURNING id',
             [companyData.name,
                 companyData.url]);
-        return rows[0].id
-    }
-
-    async getCompanyData(companyId) {
-        const users = await this.getUsersByCompany(companyId);
+        return { id : rows[0].id };
     }
 
     async getCompanyLeaderBoard(companyId) {
@@ -54,11 +47,7 @@ class CompanyService {
                 AND uc.completed = 1 GROUP BY u.id ORDER BY points DESC`,
                 [companyId]);
 
-            if (rows.length > 0) {
-                return rows;
-            }
-
-            return false;
+            return rows;
         } catch (error) {
             console.log(error)
             throw  Error('Failed to get company leader board')
@@ -77,11 +66,7 @@ class CompanyService {
                                 AND uc.completed = 1`,
                 [companyId]);
 
-            if (rows.length > 0) {
-                return rows;
-            }
-
-            return false;
+            return rows;
         } catch (error) {
             console.log(error)
             throw  Error('Failed to get company badges')
@@ -98,11 +83,7 @@ class CompanyService {
                         WHERE u.company_id = $1`,
                 [companyId]);
 
-            if (rows.length > 0) {
-                return rows;
-            }
-
-            return false;
+            return rows;
         } catch (error) {
             console.log(error)
             throw  Error('Failed to get sdgs')

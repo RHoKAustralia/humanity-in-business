@@ -62,6 +62,7 @@ module.exports = function (server, restify) {
     }
 
     const postCompany = async (req, res, next) => {
+
         if (req && req.body) {
             try {
                 const companyData = {
