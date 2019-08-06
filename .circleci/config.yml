@@ -4,12 +4,38 @@ orbs:
 workflows:
   heroku_deploy:
     jobs:
-    - deploy
+    - build
+    - deploy:
+        requires:
+        - build
+
 jobs:
+  build:
+    docker:
+      - image: circleci/node:10.16
+        environment:
+          TEST_DATABASE_URL: postgresql://root@localhost/hib_test
+      - image: circleci/postgres:11.4-alpine-ram
+        environment:
+          POSTGRES_DB: hib_test
+          POSTGRES_USER: root
+
+    steps:
+      - checkout
+      - run: sudo npm install
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.3.0
+      - run:
+          name: Wait for db
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: sudo DATABASE_URL=$TEST_DATABASE_URL npm run e2e
+
   deploy:
     executor: heroku/default # Uses the basic buildpack-deps image, which has the prerequisites for installing heroku's CLI.
     steps:
-    - checkout
     - heroku/install # Runs the heroku install command, if necessary.
     - heroku/deploy-via-git: # Deploys branch to Heroku via git push.
         only-branch: master

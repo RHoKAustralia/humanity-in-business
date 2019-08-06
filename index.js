@@ -3,7 +3,7 @@ var restify = require('restify');
 /**
  * Server config
  */
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8080;
 
 var server = restify.createServer();
 
@@ -46,3 +46,5 @@ require('./routes')(server, restify);
 server.listen(PORT, function() {
   console.log('%s listening at %s', server.name, server.url);
 });
+
+module.exports = server;

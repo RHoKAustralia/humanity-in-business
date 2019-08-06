@@ -17,8 +17,13 @@ const errs = require('restify-errors');
 module.exports = function (server, restify) {
 
     const respond = async (req, res, next) => {
-        const response = await userService.respond(req.params.name);
-        res.send(response);
+        try {
+            const response = await userService.respond(req.params.name);
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
         next();
     }
 
