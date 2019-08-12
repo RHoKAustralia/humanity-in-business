@@ -184,6 +184,18 @@ module.exports = function (server, restify) {
         next();
     };
 
+    const getAllUpcomingChallenges = async (req, res, next) => {
+        try {
+            const response = await userService.getAllUpcomingChallenges();
+            res.send(response);
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
+        next();
+    };
+
+
     const getCompletedChallenges = async (req, res, next) => {
         try {
             const response = await userService.getCompletedChallenges(req.params.userId);
@@ -237,6 +249,7 @@ module.exports = function (server, restify) {
     server.get('/challenge/:challengeId', getChallenge);
     server.get('/challenges/upcoming/:userId', getUpcomingChallenges);
     server.get('/challenges/completed/:userId', getCompletedChallenges);
+    server.get('/challenges/upcoming', getAllUpcomingChallenges);
 
     // Skills Endpoint
     server.get('/skills', getAllSkills);
