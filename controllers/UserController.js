@@ -35,7 +35,7 @@ exports.addSDGs = async (req, res, next) => {
                 const user_id = req.params.userId
                 const sdg_ids = req.body.sdg_ids
                 await userService.addSDGs(user_id, sdg_ids);
-                res.send({});
+                res.send({success: true});
             } catch (error) {
                 console.log(error)
                 next(error);

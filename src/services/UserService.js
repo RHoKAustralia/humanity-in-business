@@ -127,7 +127,6 @@ class UserService {
         }
     }
 
-
     async getCompletedChallenges(userId) {
         try {
             const {rows} = await db.query(`SELECT distinct (c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
