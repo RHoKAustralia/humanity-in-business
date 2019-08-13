@@ -127,19 +127,6 @@ class UserService {
         }
     }
 
-    async getAllUpcomingChallenges(userId) {
-        try {
-            const {rows} = await db.query(`SELECT distinct (c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
-                         FROM challenges c 
-                         WHERE c.challenge_date > NOW() `);
-
-            return rows;
-        } catch (error) {
-            console.log(error)
-            throw  Error('Failed to get all upcoming challenges')
-        }
-    }
-
     async getCompletedChallenges(userId) {
         try {
             const {rows} = await db.query(`SELECT distinct (c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
@@ -164,13 +151,13 @@ class UserService {
 
 
     async addSDGs(user_id, sdg_ids) {
-
-        sdg_ids = sdg_ids.split(',');
-        const sdgClause = sdg_ids.map((sdg_id, index) => `(${user_id}, ${sdg_id})`);
+        const values = [user_id].concat(sdg_ids);
+        const sdgClause = sdg_ids.map((sdg_id, index) => `($1, $${index + 2})`)
+            .reduce((acc, current) => `${acc}, ${current}`);
 
         let query = `INSERT INTO user_sdgs (user_id, sdg_id) VALUES ${sdgClause};`;
 
-        await db.query(query);
+        await db.query(query, values)
     }
 }
 

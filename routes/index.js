@@ -186,7 +186,7 @@ module.exports = function (server, restify) {
 
     const getAllUpcomingChallenges = async (req, res, next) => {
         try {
-            const response = await userService.getAllUpcomingChallenges();
+            const response = await challengeService.getAllUpcomingChallenges();
             res.send(response);
         } catch (error) {
             console.log(error)

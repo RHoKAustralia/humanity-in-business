@@ -37,6 +37,19 @@ class ChallengeService{
             throw  Error('Failed to get challenge')
         }
     }
+
+    async getAllUpcomingChallenges() {
+        try {
+            const {rows} = await db.query(`SELECT distinct (c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
+                         FROM challenges c 
+                         WHERE c.challenge_date > NOW() `);
+
+            return rows;
+        } catch (error) {
+            console.log(error)
+            throw  Error('Failed to get all upcoming challenges')
+        }
+    }
 }
 
 module.exports = ChallengeService;
