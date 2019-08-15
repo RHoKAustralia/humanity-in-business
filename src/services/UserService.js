@@ -14,10 +14,8 @@ class UserService {
                 console.log('Success! Database connection established.');
                 console.log(result);
                 resolve(`response: ${JSON.stringify(result)}`);
-                //process.exit()
             });
         });
-        // return `hello ${message}`;
     }
 
     login(email, encryptedPassword) {
