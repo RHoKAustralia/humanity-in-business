@@ -2,8 +2,6 @@ const request = require('supertest');
 const server = require('../../index.js');
 const expect = require('chai').expect;
 
-//const app = request(server);
-
 describe('Test API', function() {
     //app.set('Content-Type', 'application/json');
 
