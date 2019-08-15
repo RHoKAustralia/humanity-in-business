@@ -15,6 +15,7 @@
     "swagger": "^0.7.5"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "mocha": "^6.2.0",
     "nodemon": "^1.19.1",
     "supertest": "^4.0.2"
@@ -23,7 +24,7 @@
     "start": "node_modules/nodemon/bin/nodemon.js index.js",
     "dev": "node_modules/nodemon/bin/nodemon.js index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "e2e": "POSTGRES_SSL_MODE_REQUIRED=false mocha ./test/e2e/*.js --exit --timeout 5000"
+    "e2e": "POSTGRES_SSL_MODE_REQUIRED=false mocha ./test/e2e/*.js --exit"
   },
   "repository": {
     "type": "git",
