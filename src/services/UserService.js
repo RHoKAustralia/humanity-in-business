@@ -1,5 +1,5 @@
-var md5 = require('md5');
-require('../../db');
+const md5 = require('md5');
+require('../db');
 
 
 class UserService {

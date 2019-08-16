@@ -42,7 +42,7 @@ function unknownMethodHandler(req, res) {
 server.on('MethodNotAllowed', unknownMethodHandler);
 
 // Routing
-require('./routes')(server, restify);
+require('./routes')(server);
 
 server.listen(PORT, function() {
   console.log('%s listening at %s', server.name, server.url);

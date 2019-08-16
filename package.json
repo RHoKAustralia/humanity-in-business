@@ -21,8 +21,8 @@
     "supertest": "^4.0.2"
   },
   "scripts": {
-    "start": "node_modules/nodemon/bin/nodemon.js index.js",
-    "dev": "node_modules/nodemon/bin/nodemon.js index.js",
+    "start": "node_modules/nodemon/bin/nodemon.js src/index.js",
+    "dev": "node_modules/nodemon/bin/nodemon.js src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "e2e": "POSTGRES_SSL_MODE_REQUIRED=false mocha ./test/e2e/*.spec.js --exit"
   },

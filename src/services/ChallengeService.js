@@ -1,4 +1,4 @@
-require('../../db');
+require('../db');
 
 class ChallengeService{
 

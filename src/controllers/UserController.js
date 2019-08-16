@@ -1,9 +1,8 @@
 var md5 = require('md5');
 
 const errs = require('restify-errors');
-var UserService = require('../src/services/UserService');
+const UserService = require('../services/UserService');
 const userService = new UserService();
-
 
 exports.login = async function (req, res, next) {
     if (req && req.body) {
