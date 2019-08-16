@@ -1,11 +1,13 @@
 const errs = require('restify-errors');
 
-const UserService = require('../src/services/UserService');
-const CompanyService = require('../src/services/CompanyService');
-const SDGService = require('../src/services/SDGService');
-const ChallengeService = require('../src/services/ChallengeService');
-const SkillService = require('../src/services/SkillService');
+const UserService = require('../services/UserService');
+const CompanyService = require('../services/CompanyService');
+const SDGService = require('../services/SDGService');
+const ChallengeService = require('../services/ChallengeService');
+const SkillService = require('../services/SkillService');
+
 const UserController = require('../controllers/UserController');
+const HelloController = require('../controllers/HelloController');
 
 const userService = new UserService();
 const companyService = new CompanyService();
@@ -13,18 +15,7 @@ const sdgService = new SDGService();
 const challengeService = new ChallengeService();
 const skillService = new SkillService();
 
-module.exports = function (server, restify) {
-
-    const respond = async (req, res, next) => {
-        try {
-            const response = await userService.respond(req.params.name);
-            res.send(response);
-        } catch (error) {
-            console.log(error)
-            next(error)
-        }
-        next();
-    }
+module.exports = function (server) {
 
     const register = async (req, res, next) => {
         if (req && req.body) {
@@ -225,7 +216,7 @@ module.exports = function (server, restify) {
     //TODO: Protect all endpoints except login with an Authorization token
 
     // Test
-    server.get('/hello/:name', respond);
+    server.get('/hello/:name', HelloController.hello);
 
     // Login
     server.post('/login', UserController.login);

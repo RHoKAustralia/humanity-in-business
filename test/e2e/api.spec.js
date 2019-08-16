@@ -1,5 +1,5 @@
 const request = require('supertest');
-const server = require('../../index.js');
+const server = require('../../src/index.js');
 const expect = require('chai').expect;
 
 describe('Test API', function() {
