@@ -76,7 +76,7 @@ class CompanyService {
 
     async getSDGs(companyId) {
         try {
-            const {rows} = await db.query(`SELECT s.title
+            const {rows} = await db.query(`SELECT DISTINCT(s.*)
                         FROM sdgs s
                         INNER JOIN user_sdgs us ON us.sdg_id = s.id
                         INNER JOIN users u ON u.id = us.user_id

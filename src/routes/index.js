@@ -8,6 +8,7 @@ const SkillService = require('../services/SkillService');
 
 const UserController = require('../controllers/UserController');
 const HelloController = require('../controllers/HelloController');
+const CompanyController = require('../controllers/CompanyController');
 
 const userService = new UserService();
 const companyService = new CompanyService();
@@ -105,17 +106,6 @@ module.exports = function (server) {
     const getCompanyBadges = async (req, res, next) => {
         try {
             const response = await companyService.getBadges(req.params.id);
-            res.send(response);
-        } catch (error) {
-            console.log(error)
-            next(error)
-        }
-        next();
-    }
-
-    const getCompanySDGs = async (req, res, next) => {
-        try {
-            const response = await companyService.getSDGs(req.params.id);
             res.send(response);
         } catch (error) {
             console.log(error)
@@ -230,8 +220,9 @@ module.exports = function (server) {
     server.get('/company', getAllCompanies);
     server.post('/company', postCompany);
     server.get('/leaderboard/company/:id', getCompanyLeaderBoard);
+    //TODO: Change to /company/:id/badge
     server.get('/badges/company/:id', getCompanyBadges);
-    server.get('/sdgs/company/:id', getCompanySDGs);
+    server.get('/company/:id/sdg', CompanyController.getCompanySDGs);
 
     // Profile Page
     server.get('/profile/:profileId', UserController.getProfile);
