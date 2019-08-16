@@ -37,7 +37,7 @@ jobs:
           command: sudo apt-get install postgresql-client
       - run:
           name: Setup Db
-          command: psql -d $TEST_DATABASE_URL < "test/e2e/sql/setup.sql"
+          command: psql -d $TEST_DATABASE_URL < "sql/setup.sql"
       - run:
           name: e2e Tests
           command: sudo DATABASE_URL=$TEST_DATABASE_URL npm run e2e
