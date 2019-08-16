@@ -1,4 +1,5 @@
 var restify = require('restify');
+const errs = require('restify-errors');
 
 /**
  * Server config
@@ -35,7 +36,7 @@ function unknownMethodHandler(req, res) {
     return res.send(204);
   }
   else
-    return res.send(new restify.MethodNotAllowedError());
+    return res.send(new errs.MethodNotAllowedError());
 }
 
 server.on('MethodNotAllowed', unknownMethodHandler);

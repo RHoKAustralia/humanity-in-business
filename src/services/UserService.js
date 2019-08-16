@@ -5,15 +5,14 @@ require('../../db');
 class UserService {
     respond(message) {
         return new Promise((resolve, reject) => {
-            db.query('SELECT 1 + 1 AS solution', [], (error, result) => {
+            db.query('SELECT 1 + 1 AS solution', [], (error) => {
                 if (error) {
                     console.log('Something went wrong with db connection: ' + error);
                     reject(new Error(error));
                     return;
                 }
                 console.log('Success! Database connection established.');
-                console.log(result);
-                resolve(`response: ${JSON.stringify(result)}`);
+                resolve(`Success !! message:${message}`);
             });
         });
     }
