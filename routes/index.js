@@ -1,18 +1,17 @@
+const errs = require('restify-errors');
+
 const UserService = require('../src/services/UserService');
 const CompanyService = require('../src/services/CompanyService');
 const SDGService = require('../src/services/SDGService');
 const ChallengeService = require('../src/services/ChallengeService');
 const SkillService = require('../src/services/SkillService');
+const UserController = require('../controllers/UserController');
 
 const userService = new UserService();
 const companyService = new CompanyService();
 const sdgService = new SDGService();
 const challengeService = new ChallengeService();
 const skillService = new SkillService();
-
-var UserController = require('../controllers/UserController');
-
-const errs = require('restify-errors');
 
 module.exports = function (server, restify) {
 

@@ -3,7 +3,6 @@ const server = require('../../index.js');
 const expect = require('chai').expect;
 
 describe('Test API', function() {
-    //app.set('Content-Type', 'application/json');
 
     describe('Test endpoint', function () {
         it('should return a 200 Http response', async function () {
