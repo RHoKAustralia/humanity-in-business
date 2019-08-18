@@ -119,7 +119,7 @@ class UserService {
 
             return rows;
         } catch (error) {
-            console.log(error)
+            console.log(error);
             throw  Error('Failed to get upcoming challenges')
         }
     }
@@ -135,13 +135,9 @@ class UserService {
                          ORDER BY c.challenge_date DESC `,
                 [userId]);
 
-            if (rows.length > 0) {
-                return rows;
-            }
-
-            return false;
+            return rows;
         } catch (error) {
-            console.log(error)
+            console.log(error);
             throw  Error('Failed to get completed challenges')
         }
     }

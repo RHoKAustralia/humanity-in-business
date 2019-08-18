@@ -27,6 +27,7 @@ Prerequisites: Postgres SQL Server running (recommended version 11.4)
 
 ## e2e Tests
 To test the API End to End
+Test data comes from `sql/setup.sql`
 
 `npm run e2e`
 
