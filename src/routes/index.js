@@ -181,17 +181,6 @@ module.exports = function (server) {
     };
 
 
-    const getCompletedChallenges = async (req, res, next) => {
-        try {
-            const response = await userService.getCompletedChallenges(req.params.userId);
-            res.send(response);
-        } catch (error) {
-            console.log(error)
-            next(error)
-        }
-        next();
-    };
-
     const getAllSkills = async (req, res, next) => {
         try {
             const response = await skillService.getAllSkills();
@@ -215,6 +204,12 @@ module.exports = function (server) {
     server.post('/register', register);
     server.post('/user/:userId/sdg', UserController.addSDGs);
 
+    // User
+    server.get('/user/:userId/challenges/completed', UserController.getCompletedChallenges);
+
+    // Profile Page
+    server.get('/profile/:profileId', UserController.getProfile);
+
     // Companies
     server.get('/company/:id', getCompany);
     server.get('/company', getAllCompanies);
@@ -222,10 +217,8 @@ module.exports = function (server) {
     server.get('/leaderboard/company/:id', getCompanyLeaderBoard);
     //TODO: Change to /company/:id/badge
     server.get('/badges/company/:id', getCompanyBadges);
-    server.get('/company/:id/sdg', CompanyController.getCompanySDGs);
 
-    // Profile Page
-    server.get('/profile/:profileId', UserController.getProfile);
+    server.get('/company/:id/sdg', CompanyController.getCompanySDGs);
 
     // SDG Endpoints
     server.get('/sdg/:sdgId', getSDG);
@@ -234,7 +227,6 @@ module.exports = function (server) {
     server.post('/addChallengeToUser', addChallengeToUser);
     server.get('/challenge/:challengeId', getChallenge);
     server.get('/challenges/upcoming/:userId', getUpcomingChallenges);
-    server.get('/challenges/completed/:userId', getCompletedChallenges);
     server.get('/challenges/upcoming', getAllUpcomingChallenges);
 
     // Skills Endpoint

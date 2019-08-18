@@ -2,6 +2,7 @@ const request = require('supertest');
 const server = require('../../src/index.js');
 const expect = require('chai').expect;
 
+// Before Step: Insert sql/setup.sql data
 describe('Test API', function() {
 
     describe('Test endpoint', function () {
@@ -29,5 +30,18 @@ describe('Test API', function() {
         })
 
         //TODO: Test unauthorised request
+    });
+
+    describe('Get Completed challenges', function () {
+        it('should return 200 Http response and completed challenges if any', async function () {
+            await request(server)
+                .get('/user/1/challenges/completed')
+                .set('Content-Type', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body).to.be.an('Array');
+                    expect(res.body).to.be.empty;
+                })
+        })
     });
 });

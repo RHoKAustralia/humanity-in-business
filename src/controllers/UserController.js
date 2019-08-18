@@ -60,3 +60,13 @@ exports.getProfile = async (req, res, next) => {
     next();
 }
 
+exports.getCompletedChallenges = async (req, res, next) => {
+    try {
+        const response = await userService.getCompletedChallenges(req.params.userId);
+        res.send(response);
+    } catch (error) {
+        console.log(error)
+        next(error)
+    }
+    next();
+};
