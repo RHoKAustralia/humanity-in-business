@@ -44,4 +44,21 @@ describe('Test API', function() {
                 })
         })
     });
+
+    describe('Get communities', function () {
+        it('should return 200 Http response and communities if any', async function () {
+            await request(server)
+                .get('/communities')
+                .set('Content-Type', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body).to.be.an('Array');
+                    expect(res.body).to.have.lengthOf(1);
+                    expect(res.body[0]).to.include({
+                        id: 1,
+                        name: 'The Community of the Ring'
+                    })
+                })
+        })
+    });
 });
