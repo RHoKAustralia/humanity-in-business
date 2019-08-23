@@ -9,6 +9,7 @@ const SkillService = require('../services/SkillService');
 const UserController = require('../controllers/UserController');
 const HelloController = require('../controllers/HelloController');
 const CompanyController = require('../controllers/CompanyController');
+const CommunityController = require('../controllers/CommunityController');
 
 const userService = new UserService();
 const companyService = new CompanyService();
@@ -209,6 +210,9 @@ module.exports = function (server) {
 
     // Profile Page
     server.get('/profile/:profileId', UserController.getProfile);
+
+    //Communities
+    server.get('/communities', CommunityController.getCommunities);
 
     // Companies
     server.get('/company/:id', getCompany);

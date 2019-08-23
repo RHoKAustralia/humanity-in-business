@@ -59,6 +59,17 @@ create table if not exists user_challenges
   completed    smallint default '0' :: smallint
 );
 
+-- Communities
+create table if not exists communities
+(
+  id   serial       not null
+    constraint communities_pkey
+    primary key,
+  name varchar(255) not null
+);
+
 
 -- Insert Data
 INSERT INTO users (id, full_name, email, title, image_url, password) VALUES (1, 'Gandalf The Grey', 'gandalf@theshire.com', 'Wizard', 'https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg', MD5('You should not pass'));
+
+INSERT INTO communities(id, name) VALUES (1, 'The Community of the Ring');
