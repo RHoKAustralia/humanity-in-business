@@ -65,7 +65,9 @@ create table if not exists communities
   id   serial       not null
     constraint communities_pkey
     primary key,
-  name varchar(255) not null
+  name varchar(255) not null,
+  description varchar(255),
+  image_url varchar(255)
 );
 
 -- Events
@@ -86,6 +88,6 @@ create table if not exists events
 -- Insert Data
 INSERT INTO users (id, full_name, email, title, image_url, password) VALUES (1, 'Gandalf The Grey', 'gandalf@theshire.com', 'Wizard', 'https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg', MD5('You should not pass'));
 
-INSERT INTO communities(id, name) VALUES (1, 'The Community of the Ring');
+INSERT INTO communities(id, name, description, image_url) VALUES (1, 'The Community of the Ring', 'Save the Middle Earth', 'http://lotr.org/rivendell.jpg');
 
 INSERT INTO events(id, name, hours, community_id) VALUES (1, 'The Rivendell assembly', 50, 1)
