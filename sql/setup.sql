@@ -68,8 +68,24 @@ create table if not exists communities
   name varchar(255) not null
 );
 
+-- Events
+create table if not exists events
+(
+  id           serial       not null
+    constraint events_pkey
+    primary key,
+  name         varchar(255) not null,
+  hours        integer,
+  community_id integer      not null
+    constraint events_communities_id_fk
+    references communities
+    on delete cascade
+);
+
 
 -- Insert Data
 INSERT INTO users (id, full_name, email, title, image_url, password) VALUES (1, 'Gandalf The Grey', 'gandalf@theshire.com', 'Wizard', 'https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg', MD5('You should not pass'));
 
 INSERT INTO communities(id, name) VALUES (1, 'The Community of the Ring');
+
+INSERT INTO events(id, name, hours, community_id) VALUES (1, 'The Rivendell assembly', 50, 1)
