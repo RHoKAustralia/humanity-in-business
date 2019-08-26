@@ -55,10 +55,10 @@ describe('Test API', function() {
                     .then(res => {
                         expect(res.body).to.be.an('Array');
                         expect(res.body).to.have.lengthOf(1);
-                        expect(res.body[0]).to.include({
-                            id: 1,
-                            name: 'The Community of the Ring'
-                        })
+                        expect(res.body[0]).to.have.property('id', 1);
+                        expect(res.body[0]).to.have.property('name', 'The Community of the Ring');
+                        expect(res.body[0]).to.have.property('description', 'Save the Middle Earth');
+                        expect(res.body[0]).to.have.property('image_url', 'http://lotr.org/rivendell.jpg');
                     })
             })
         });
