@@ -213,6 +213,7 @@ module.exports = function (server) {
 
     //Communities
     server.get('/communities', CommunityController.getCommunities);
+    server.get('/communities/:communityId/events', CommunityController.getEvents);
 
     // Companies
     server.get('/company/:id', getCompany);
