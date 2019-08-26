@@ -81,7 +81,10 @@ create table if not exists events
   community_id integer      not null
     constraint events_communities_id_fk
     references communities
-    on delete cascade
+    on delete cascade,
+  description  varchar(255),
+  image_url    varchar(255),
+  date         timestamp with time zone
 );
 
 
@@ -90,4 +93,4 @@ INSERT INTO users (id, full_name, email, title, image_url, password) VALUES (1, 
 
 INSERT INTO communities(id, name, description, image_url) VALUES (1, 'The Community of the Ring', 'Save the Middle Earth', 'http://lotr.org/rivendell.jpg');
 
-INSERT INTO events(id, name, hours, community_id) VALUES (1, 'The Rivendell assembly', 50, 1)
+INSERT INTO events(id, name, hours, community_id, description, image_url, date) VALUES (1, 'The Rivendell assembly', 50, 1,'Save the Middle Earth', 'http://lotr.org/rivendell.jpg', '1954-07-29 00:00:00+00');

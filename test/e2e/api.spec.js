@@ -75,7 +75,10 @@ describe('Test API', function() {
                         expect(res.body[0]).to.include({
                             id: 1,
                             name: 'The Rivendell assembly',
-                            hours: 50
+                            hours: 50,
+                            description: 'Save the Middle Earth',
+                            image_url: 'http://lotr.org/rivendell.jpg',
+                            date: '1954-07-29T00:00:00.000Z'
                         })
                     })
             })
