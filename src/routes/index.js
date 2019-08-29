@@ -10,6 +10,7 @@ const UserController = require('../controllers/UserController');
 const HelloController = require('../controllers/HelloController');
 const CompanyController = require('../controllers/CompanyController');
 const CommunityController = require('../controllers/CommunityController');
+const EventController = require('../controllers/EventController');
 
 const userService = new UserService();
 const companyService = new CompanyService();
@@ -211,10 +212,13 @@ module.exports = function (server) {
     // Profile Page
     server.get('/profile/:profileId', UserController.getProfile);
 
-    //Communities
+    // Communities
     server.get('/communities', CommunityController.getCommunities);
     server.get('/communities/:communityId', CommunityController.getCommunity);
     server.get('/communities/:communityId/events', CommunityController.getEvents);
+
+    // Events
+    server.get('/events/:eventId/projects', EventController.getProjects);
 
     // Companies
     server.get('/company/:id', getCompany);
