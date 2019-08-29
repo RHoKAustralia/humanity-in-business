@@ -55,10 +55,29 @@ describe('Test API', function() {
                     .then(res => {
                         expect(res.body).to.be.an('Array');
                         expect(res.body).to.have.lengthOf(1);
-                        expect(res.body[0]).to.have.property('id', 1);
-                        expect(res.body[0]).to.have.property('name', 'The Community of the Ring');
-                        expect(res.body[0]).to.have.property('description', 'Save the Middle Earth');
-                        expect(res.body[0]).to.have.property('image_url', 'http://lotr.org/rivendell.jpg');
+                        expect(res.body[0]).to.include({
+                            id: 1,
+                            name: 'The Community of the Ring',
+                            description: 'Save the Middle Earth',
+                            image_url: 'http://lotr.org/rivendell.jpg',
+                        })
+                    })
+            })
+        });
+
+        describe('Get community', function () {
+            it('should return 200 Http response and communities if any', async function () {
+                await request(server)
+                    .get('/communities/1')
+                    .set('Content-Type', 'application/json')
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body).to.include({
+                            id: 1,
+                            name: 'The Community of the Ring',
+                            description: 'Save the Middle Earth',
+                            image_url: 'http://lotr.org/rivendell.jpg',
+                        })
                     })
             })
         });
