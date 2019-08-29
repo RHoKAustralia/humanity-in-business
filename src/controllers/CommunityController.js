@@ -14,6 +14,17 @@ exports.getCommunities = async (req, res, next) => {
     }
 };
 
+exports.getCommunity = async (req, res, next) => {
+    try {
+        const community = await communityService.getCommunity(req.params.communityId);
+        res.send(community);
+
+    } catch (e) {
+        console.log(e);
+        next(new Error('Failed to execute request'));
+    }
+};
+
 exports.getEvents = async (req, res, next) => {
     try {
         const communities = await eventService.getCommunityEvents(req.params.communityId);
