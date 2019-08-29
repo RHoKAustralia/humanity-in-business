@@ -7,7 +7,7 @@ class EventService {
     }
 
     async getProjects(eventId) {
-        const {rows} = await db.query('SELECT p.* FROM events_projects ep ' +
+        const {rows} = await db.query('SELECT p.* FROM teams ep ' +
             'JOIN projects p ON p.id = ep.project_id ' +
             'WHERE event_id = $1', [eventId]);
         return rows;

@@ -22,4 +22,5 @@ describe('Events API', function () {
                 })
         })
     });
+
 });

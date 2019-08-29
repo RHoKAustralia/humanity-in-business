@@ -99,15 +99,18 @@ create table if not exists projects
   image_url   varchar(255)
 );
 
--- Events <-> Projects (1..n <-> 1..n)
-create table if not exists events_projects
+-- Teams: Events <-> Projects (1..n <-> 1..n)
+create table if not exists teams
 (
-  event_id   integer not null
-    constraint events_fk
+  id          serial       not null
+    constraint teams_pkey
+    primary key,
+  event_id  integer not null
+    constraint participates_to_event
     references events
     on delete cascade,
   project_id integer not null
-    constraint projects_fk
+    constraint contributes_to_event
     references projects
     on delete cascade
 );
@@ -122,4 +125,4 @@ INSERT INTO events(id, name, hours, community_id, description, image_url, date) 
 
 INSERT INTO projects(id, name, description, owner, image_url) VALUES (1, 'Save the Middle Earth', 'Destroy the ring', 'The Fellowship of the Ring', 'http://lotr.org/rivendell.jpg');
 
-INSERT INTO events_projects(event_id, project_id) VALUES (1, 1)
+INSERT INTO teams (id, event_id, project_id) VALUES (1, 1, 1)
