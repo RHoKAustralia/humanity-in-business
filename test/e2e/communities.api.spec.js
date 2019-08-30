@@ -23,7 +23,7 @@ describe('Communities API', function() {
     });
 
     describe('Get community', function () {
-        it('should return 200 Http response and communities if any', async function () {
+        it('should return 200 Http response and community if any', async function () {
             await request(server)
                 .get('/communities/1')
                 .set('Content-Type', 'application/json')
@@ -40,7 +40,7 @@ describe('Communities API', function() {
     });
 
     describe('Get community events', function () {
-        it('should return 200 Http response and communities if any', async function () {
+        it('should return 200 Http response and community events if any', async function () {
             await request(server)
                 .get('/communities/1/events')
                 .set('Content-Type', 'application/json')

@@ -11,6 +11,7 @@ const HelloController = require('../controllers/HelloController');
 const CompanyController = require('../controllers/CompanyController');
 const CommunityController = require('../controllers/CommunityController');
 const EventController = require('../controllers/EventController');
+const TeamController = require('../controllers/TeamController');
 
 const userService = new UserService();
 const companyService = new CompanyService();
@@ -219,6 +220,9 @@ module.exports = function (server) {
 
     // Events
     server.get('/events/:eventId/projects', EventController.getProjects);
+
+    // Teams
+    server.post('/teams/:teamId/members', TeamController.addMember);
 
     // Companies
     server.get('/company/:id', getCompany);

@@ -1,10 +1,13 @@
 const request = require('supertest');
 const server = require('../../src/index.js');
-const expect = require('chai').expect;
+const expect = require('chai').expect
+
+const TeamService = require('../../src/services/TeamService.js');
+const teamService = new TeamService();
 
 describe('Events API', function () {
     describe('Get events projects', function () {
-        it('should return 200 Http response and communities if any', async function () {
+        it('should return 200 Http response and events projects if any', async function () {
             await request(server)
                 .get('/events/1/projects')
                 .set('Content-Type', 'application/json')
@@ -23,4 +26,19 @@ describe('Events API', function () {
         })
     });
 
+    describe('User join an team', function () {
+        it('should return 201 Http response', async function () {
+            await request(server)
+                .post('/teams/1/members')
+                .send({
+                    user_id: 2
+                })
+                .set('Content-Type', 'application/json')
+                .expect(201)
+        });
+
+        after(async function() {
+            await teamService.removeMember(1, 2);
+        });
+    });
 });
