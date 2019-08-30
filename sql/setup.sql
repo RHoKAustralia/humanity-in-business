@@ -110,10 +110,13 @@ create table if not exists teams
     references events
     on delete cascade,
   project_id integer not null
-    constraint contributes_to_event
+    constraint contributes_to_project
     references projects
     on delete cascade
 );
+
+create unique index if not exists teams_event_id_project_id_uindex
+  on teams (event_id, project_id);
 
 -- Teams_members: Teams <-> Users (0..n <-> 1..n)
 create table if not exists teams_members

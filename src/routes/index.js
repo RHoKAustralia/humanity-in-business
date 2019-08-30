@@ -219,7 +219,7 @@ module.exports = function (server) {
     server.get('/communities/:communityId/events', CommunityController.getEvents);
 
     // Events
-    server.get('/events/:eventId/projects', EventController.getProjects);
+    server.get('/events/:eventId/teams', EventController.getTeams);
 
     // Teams
     server.post('/teams/:teamId/members', TeamController.addMember);

@@ -6,11 +6,18 @@ class EventService {
         return rows;
     }
 
-    async getProjects(eventId) {
-        const {rows} = await db.query('SELECT p.* FROM teams t ' +
+    async getTeams(eventId) {
+        const {rows} = await db.query('SELECT p.*, t.id as team_id FROM teams t ' +
             'JOIN projects p ON p.id = t.project_id ' +
             'WHERE event_id = $1', [eventId]);
-        return rows;
+         return rows.map(r => {
+             const team_Id = r.team_id;
+             delete r.team_id;
+             return {
+                 team_Id,
+                 project: r
+             }
+         })
     }
 }
 
