@@ -34,3 +34,13 @@ exports.getEvents = async (req, res, next) => {
         next(new Error('Failed to execute request'));
     }
 };
+
+exports.getLeaderBoard = async (req, res, next) => {
+    try {
+        const leaderboard = await communityService.getLeaderBoard(req.params.communityId);
+        res.send(leaderboard);
+    } catch (e) {
+        console.log(e);
+        next(new Error('Failed to execute request'));
+    }
+}

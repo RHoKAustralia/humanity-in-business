@@ -12,6 +12,23 @@ class CommunityService {
         return rows[0];
     }
 
+    async getLeaderBoard(communityId) {
+        const {rows} = await db.query('SELECT u.id as id, u.full_name as name, u.title, u.image_url, ' +
+            'sum(e.hours) as hours, ' +
+            'count(distinct(t.project_id)) as projects, ' +
+            'count(distinct(e.id)) as events ' +
+            'FROM communities c ' +
+            'JOIN events e on e.community_id = c.id ' +
+            'JOIN teams t on t.event_id = e.id ' +
+            'JOIN teams_members tm on tm.team_id = t.id ' +
+            'JOIN users u on tm.user_id = u.id ' +
+            'GROUP BY c.id, u.id ' +
+            'HAVING c.id = $1 ' +
+            'ORDER BY hours DESC ' +
+            'LIMIT 15', [communityId]);
+        return rows;
+    }
+
 }
 
 module.exports = CommunityService;
