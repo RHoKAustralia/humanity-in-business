@@ -74,6 +74,7 @@ describe('Communities API', function() {
                         expect(res.body[0]).to.include({
                             id: 1,
                             name: 'Gandalf The Grey',
+                            company: 'The Great Wizards Company',
                             title: 'Wizard',
                             image_url: 'https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg',
                             events: 1,

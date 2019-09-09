@@ -134,7 +134,9 @@ create table if not exists teams_members
 );
 
 -- Insert Data
-INSERT INTO users (id, full_name, email, title, image_url, password) VALUES (1, 'Gandalf The Grey', 'gandalf@theshire.com', 'Wizard', 'https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg', MD5('You should not pass'));
+INSERT INTO companies (id, name, url, image_url) VALUES (1, 'The Great Wizards Company', 'http://thegreatwizards.org', 'http://thegreatwizards.org/logo');
+
+INSERT INTO users (id, company_id, full_name, email, title, image_url, password) VALUES (1, 1, 'Gandalf The Grey', 'gandalf@theshire.com', 'Wizard', 'https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg', MD5('You should not pass'));
 INSERT INTO users (id, full_name, email, title, image_url, password) VALUES (2, 'Aragorn', 'aragorn@theshire.com', 'King of Gondor', null, MD5('Strider'));
 INSERT INTO users (id, full_name, email, title, image_url, password) VALUES (3, 'Bilbo', 'bilbo@theshire.com', 'The Hobbit', null, MD5('Baggins'));
 
