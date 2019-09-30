@@ -31,18 +31,4 @@ describe('Test API', function() {
 
         //TODO: Test unauthorised request
     });
-
-    describe('Get Completed challenges', function () {
-        it('should return 200 Http response and completed challenges if any', async function () {
-            await request(server)
-                .get('/user/1/challenges/completed')
-                .set('Content-Type', 'application/json')
-                .expect(200)
-                .then(res => {
-                    expect(res.body).to.be.an('Array');
-                    expect(res.body).to.be.empty;
-                })
-        })
-    });
-
 });

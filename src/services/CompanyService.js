@@ -39,40 +39,6 @@ class CompanyService {
         return { id : rows[0].id };
     }
 
-    async getCompanyLeaderBoard(companyId) {
-        try {
-            const {rows} = await db.query(`SELECT u.full_name AS name, SUM(c.points) AS points, u.title
-                FROM users u INNER JOIN user_challenges uc ON u.id = uc.user_id
-                INNER JOIN challenges c ON uc.challenge_id = c.id WHERE company_id = $1 
-                AND uc.completed = 1 GROUP BY u.id ORDER BY points DESC`,
-                [companyId]);
-
-            return rows;
-        } catch (error) {
-            console.log(error)
-            throw  Error('Failed to get company leader board')
-        }
-    }
-
-    async getBadges(companyId) {
-        try {
-            const {rows} = await db.query(`SELECT DISTINCT(b.id), b.name
-                            FROM challenges c
-                            INNER JOIN challenge_badges cb ON cb.challenge_id = c.id
-                            INNER JOIN badges b ON b.id = cb.badge_id
-                            INNER JOIN user_challenges uc ON uc.challenge_id = c.id
-                            INNER JOIN users u ON u.id = uc.user_id
-                            WHERE u.company_id = $1
-                                AND uc.completed = 1`,
-                [companyId]);
-
-            return rows;
-        } catch (error) {
-            console.log(error)
-            throw  Error('Failed to get company badges')
-        }
-    }
-
 
     async getSDGs(companyId) {
         try {

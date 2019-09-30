@@ -84,61 +84,13 @@ class UserService {
             const {rows} = await db.query('select u.full_name, u.email, u.title, u.image_url, c.id as company_id, c.name as company_name,  ' +
                 'c.url, c.image_url from users u join companies c on u.company_id = c.id where u.id =  $1',
                 [profileId]);
-            const profile = rows[0]
+            const profile = rows[0];
+            profile.total_points = 0;
 
-            try {
-                const {rows} = await db.query('select SUM(ch.points) as total_points from users u left join user_challenges uc on u.id = uc.user_id left join challenges ch on ch.id = uc.challenge_id where u.id = $1 and uc.completed = 1 group by u.id;',
-                    [profileId]);
-                if (rows.length > 0) {
-                    profile.total_points = rows[0].total_points
-                } else {
-                    profile.total_points = 0
-                }
-            } catch (error) {
-                console.log(error)
-                profile.total_points = 0
-            }
             return profile
         } catch (error) {
             console.log(error)
             throw  Error('Failed to get profile')
-        }
-    }
-
-    async getUpcomingChallenges(userId) {
-        try {
-            const {rows} = await db.query(`SELECT distinct (c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
-                         FROM users u
-                                INNER JOIN user_skills us ON us.user_id = u.id
-                                INNER JOIN user_sdgs usdgs ON usdgs.user_id = u.id
-                                INNER JOIN skill_challenges sc ON sc.skill_id = us.skill_id
-                                INNER JOIN sdg_challenges sch ON sch.sdg_id = usdgs.sdg_id
-                                INNER JOIN challenges c ON c.id = sc.challenge_id
-                         WHERE c.challenge_date > NOW() AND u.id = $1`,
-                [userId]);
-
-            return rows;
-        } catch (error) {
-            console.log(error);
-            throw  Error('Failed to get upcoming challenges')
-        }
-    }
-
-    async getCompletedChallenges(userId) {
-        try {
-            const {rows} = await db.query(`SELECT distinct (c.id), c.title, c.description, c.challenge_date, c.points, c.image_url
-                         FROM users u
-                                INNER JOIN user_challenges uc ON uc.user_id = u.id
-                                INNER JOIN challenges c ON c.id = uc.challenge_id
-                         WHERE uc.completed = 1
-                         AND u.id = $1
-                         ORDER BY c.challenge_date DESC `,
-                [userId]);
-
-            return rows;
-        } catch (error) {
-            console.log(error);
-            throw  Error('Failed to get completed challenges')
         }
     }
 
