@@ -28,37 +28,6 @@ create table if not exists users
   password   varchar(255) not null
 );
 
--- Challenges
-create table if not exists challenges
-(
-  id             serial            not null
-    constraint challenges_pkey
-    primary key,
-  title          varchar(255),
-  description    text,
-  location       varchar(255),
-  challenge_date date,
-  points         integer default 0 not null,
-  image_url      varchar(255)
-);
-
--- User Challenges
-create table if not exists user_challenges
-(
-  id           serial  not null
-    constraint user_challenges_pkey
-    primary key,
-  user_id      integer not null
-    constraint fk_uc_user
-    references users
-    on update cascade on delete cascade,
-  challenge_id integer not null
-    constraint fk_uc_challenge
-    references challenges
-    on update cascade on delete cascade,
-  completed    smallint default '0' :: smallint
-);
-
 -- Communities
 create table if not exists communities
 (
