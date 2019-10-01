@@ -3,7 +3,6 @@ const errs = require('restify-errors');
 const UserService = require('../services/UserService');
 const CompanyService = require('../services/CompanyService');
 const SDGService = require('../services/SDGService');
-const SkillService = require('../services/SkillService');
 
 const UserController = require('../controllers/UserController');
 const HelloController = require('../controllers/HelloController');
@@ -15,7 +14,6 @@ const TeamController = require('../controllers/TeamController');
 const userService = new UserService();
 const companyService = new CompanyService();
 const sdgService = new SDGService();
-const skillService = new SkillService();
 
 module.exports = function (server) {
 
@@ -28,7 +26,6 @@ module.exports = function (server) {
                 title: req.body.title || 'Default title',
                 image_url: req.body.image_url || 'Default image URL',
                 company_id: req.body.company_id || 1,
-                skills: req.body.skills || []
             };
 
             try {
@@ -93,24 +90,9 @@ module.exports = function (server) {
         next();
     }
 
-
-
-
-
     const getSDG = async (req, res, next) => {
         try {
             const response = await sdgService.getSDG(req.params.sdgId);
-            res.send(response);
-        } catch (error) {
-            console.log(error)
-            next(error)
-        }
-        next();
-    }
-
-    const getAllSkills = async (req, res, next) => {
-        try {
-            const response = await skillService.getAllSkills();
             res.send(response);
         } catch (error) {
             console.log(error)
@@ -157,7 +139,4 @@ module.exports = function (server) {
 
     // SDG Endpoints
     server.get('/sdg/:sdgId', getSDG);
-
-    // Skills Endpoint
-    server.get('/skills', getAllSkills);
 }

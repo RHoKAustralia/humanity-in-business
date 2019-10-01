@@ -108,17 +108,22 @@ INSERT INTO companies (id, name, url, image_url) VALUES (1, 'The Great Wizards C
 INSERT INTO users (id, company_id, full_name, email, title, image_url, password) VALUES (1, 1, 'Gandalf The Grey', 'gandalf@theshire.com', 'Wizard', 'https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg', MD5('You should not pass'));
 INSERT INTO users (id, full_name, email, title, image_url, password) VALUES (2, 'Aragorn', 'aragorn@theshire.com', 'King of Gondor', null, MD5('Strider'));
 INSERT INTO users (id, full_name, email, title, image_url, password) VALUES (3, 'Bilbo', 'bilbo@theshire.com', 'The Hobbit', null, MD5('Baggins'));
+SELECT setval('users_id_seq', (SELECT MAX(id) from "users"));
 
 INSERT INTO communities(id, name, description, image_url) VALUES (1, 'The Community of the Ring', 'Save the Middle Earth', 'http://lotr.org/rivendell.jpg');
+SELECT setval('communities_id_seq', (SELECT MAX(id) from "communities"));
 
 INSERT INTO events(id, name, hours, community_id, description, image_url, date) VALUES (1, 'The Rivendell assembly', 50, 1,'Save the Middle Earth', 'http://lotr.org/rivendell.jpg', '1954-07-29 00:00:00+00');
 INSERT INTO events(id, name, hours, community_id, description, date) VALUES (2, 'Bilbo Birthday', 8, 1,'Bilbo Birthday', '1954-07-29 00:00:00+00');
+SELECT setval('events_id_seq', (SELECT MAX(id) from "events"));
 
 INSERT INTO projects(id, name, description, owner, image_url) VALUES (1, 'Save the Middle Earth', 'Destroy the ring', 'The Fellowship of the Ring', 'http://lotr.org/rivendell.jpg');
 INSERT INTO projects(id, name, owner) VALUES (2, 'Smoke on top of the hill', 'Bilbo');
+SELECT setval('projects_id_seq', (SELECT MAX(id) from "projects"));
 
 INSERT INTO teams (id, event_id, project_id) VALUES (1, 1, 1);
 INSERT INTO teams (id, event_id, project_id) VALUES (2, 2, 2);
+SELECT setval('teams_id_seq', (SELECT MAX(id) from "teams"));
 
 -- Gandalf in Save the Middle Earth Team
 INSERT INTO teams_members (team_id, user_id) VALUES (1, 1);
