@@ -2,7 +2,6 @@ const request = require('supertest');
 const server = require('../../src/index.js');
 const expect = require('chai').expect;
 
-// Before Step: Insert sql/setup.sql data
 describe('Test API', function() {
 
     describe('Test endpoint', function () {
