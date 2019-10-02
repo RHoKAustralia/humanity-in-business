@@ -24,27 +24,16 @@ class UserService {
     }
 
     async register(userData) {
-        const newUserId = await this.addUser(userData)
-            .catch(error => {
-                console.log(error);
-                //TODO: Handle error code 23505 detail: 'Key (email)=(newEmail) already exists.'
-                throw new Error('Failed to register user')
-            });
-
-        return {id: newUserId};
-    }
-
-    async addUser(userData) {
-        const {rows} = await db.query(`INSERT INTO users 
-            (full_name, email, password, title, image_url, company_id) VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING id`,
+        const {rows} = await db.query(`INSERT INTO users
+                                           (full_name, email, password, title, image_url)
+                                       VALUES ($1, $2, $3, $4, $5)
+                                       RETURNING id, full_name, email, title, image_url`,
             [userData.full_name,
                 userData.email,
                 md5(userData.password),
                 userData.title,
-                userData.image_url,
-                userData.company_id]);
-        return rows[0].id
+                userData.image_url]);
+        return rows[0]
     }
 
     async getProfile(profileId) {

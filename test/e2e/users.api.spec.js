@@ -17,15 +17,21 @@ describe('Users API', function() {
                     email: "foo2@bar.com",
                     title: "Rocket Scientist",
                     password: "password",
-                    company_id: 1,
-                    image_url:""
+                    image_url:"http://test.jpg"
                 })
                 .set('Content-Type', 'application/json')
                 .expect(200)
                 .then(res => {
-                    expect(res.body).to.be.an('Object');
                     expect(res.body).to.have.property('id');
                     expect(res.body.id).to.be.an('Number');
+
+                    expect(res.body).to.contains({
+                        full_name: "test",
+                        email: "foo2@bar.com",
+                        title: "Rocket Scientist",
+                        image_url:"http://test.jpg"
+                    });
+
                     return res.body.id;
                 });
         });

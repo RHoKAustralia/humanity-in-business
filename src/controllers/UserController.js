@@ -1,8 +1,24 @@
-var md5 = require('md5');
-
+const md5 = require('md5');
 const errs = require('restify-errors');
 const UserService = require('../services/UserService');
 const userService = new UserService();
+
+exports.register = async (req, res, next) => {
+    if (req && req.body) {
+        try {
+            const response = await userService.register(req.body);
+            res.send(response);
+        } catch (error) {
+            //TODO: Return Http 409 on user exists with same email
+            console.log(error)
+            next(new Error("Failed to register user"))
+        }
+    } else {
+        next(new errs.BadRequestError('Invalid request'));
+    }
+
+    next();
+}
 
 exports.login = async function (req, res, next) {
     if (req && req.body) {

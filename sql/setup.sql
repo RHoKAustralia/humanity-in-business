@@ -28,6 +28,9 @@ create table if not exists users
   password   varchar(255) not null
 );
 
+create unique index users_email_uindex
+    on users (email);
+
 -- Communities
 create table if not exists communities
 (

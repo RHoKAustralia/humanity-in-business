@@ -19,13 +19,10 @@ class CompanyService {
 
     async getAllCompanies() {
         try {
-            const {rows} = await db.query('SELECT * from companies');
-
-            return rows;
-
+            return await db.query('SELECT * from companies');
         } catch (error) {
             console.log(error)
-            throw  Error('Failed to get all companies')
+            throw Error('Failed to get all companies')
         }
     }
 
