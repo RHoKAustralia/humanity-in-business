@@ -2,18 +2,15 @@ const errs = require('restify-errors');
 
 const UserService = require('../services/UserService');
 const CompanyService = require('../services/CompanyService');
-const SDGService = require('../services/SDGService');
 
 const UserController = require('../controllers/UserController');
 const HelloController = require('../controllers/HelloController');
-const CompanyController = require('../controllers/CompanyController');
 const CommunityController = require('../controllers/CommunityController');
 const EventController = require('../controllers/EventController');
 const TeamController = require('../controllers/TeamController');
 
 const userService = new UserService();
 const companyService = new CompanyService();
-const sdgService = new SDGService();
 
 module.exports = function (server) {
 
@@ -90,17 +87,6 @@ module.exports = function (server) {
         next();
     }
 
-    const getSDG = async (req, res, next) => {
-        try {
-            const response = await sdgService.getSDG(req.params.sdgId);
-            res.send(response);
-        } catch (error) {
-            console.log(error)
-            next(error)
-        }
-        next();
-    }
-
     //TODO: Protect all endpoints except login with an Authorization token
 
     // Test
@@ -111,7 +97,6 @@ module.exports = function (server) {
 
     // Register
     server.post('/register', register);
-    server.post('/user/:userId/sdg', UserController.addSDGs);
 
     // Profile Page
     server.get('/profile/:profileId', UserController.getProfile);
@@ -133,10 +118,4 @@ module.exports = function (server) {
     server.get('/company/:id', getCompany);
     server.get('/company', getAllCompanies);
     server.post('/company', postCompany);
-    //TODO: Change to /company/:id/badge
-
-    server.get('/company/:id/sdg', CompanyController.getCompanySDGs);
-
-    // SDG Endpoints
-    server.get('/sdg/:sdgId', getSDG);
 }
