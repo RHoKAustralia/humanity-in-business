@@ -62,16 +62,6 @@ class UserService {
         }
     }
 
-    async addSDGs(user_id, sdg_ids) {
-        const values = [user_id].concat(sdg_ids);
-        const sdgClause = sdg_ids.map((sdg_id, index) => `($1, $${index + 2})`)
-            .reduce((acc, current) => `${acc}, ${current}`);
-
-        let query = `INSERT INTO user_sdgs (user_id, sdg_id) VALUES ${sdgClause};`;
-
-        await db.query(query, values)
-    }
-
     async removeUser(userId) {
         db.query("DELETE FROM users where id = $1", [userId])
     }

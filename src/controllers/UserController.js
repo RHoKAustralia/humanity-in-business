@@ -27,28 +27,6 @@ exports.login = async function (req, res, next) {
     next();
 };
 
-exports.addSDGs = async (req, res, next) => {
-    if (req && req.params && req.body) {
-        if (req.body.sdg_ids && req.body.sdg_ids.length > 0) {
-            try {
-                const user_id = req.params.userId
-                const sdg_ids = req.body.sdg_ids
-                await userService.addSDGs(user_id, sdg_ids);
-                res.send({success: true});
-            } catch (error) {
-                console.log(error)
-                next(error);
-            }
-        } else {
-            next(new errs.BadRequestError('No SDG Found: Please provide at least one SDG'));
-        }
-    } else {
-        next(new errs.BadRequestError('Invalid request'));
-    }
-
-    next();
-}
-
 exports.getProfile = async (req, res, next) => {
     try {
         const response = await userService.getProfile(req.params.profileId);
