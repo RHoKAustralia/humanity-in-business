@@ -1,6 +1,8 @@
 const md5 = require('md5');
 require('../db');
 
+const CompanyService = require('../../src/services/CompanyService.js');
+const companyService = new CompanyService();
 
 class UserService {
     login(email, encryptedPassword) {
@@ -51,8 +53,31 @@ class UserService {
         }
     }
 
+    /**
+     * Changes user company using company name.
+     * Creates a new company if none is found.
+     */
+    async changeCompany(userId, companyName) {
+        let company = await companyService.findCompany({name: companyName});
+        if (!company){
+            company = companyService.saveCompany({name: companyName});
+        }
+
+        await this.updateCompany(userId, company.id);
+        return company;
+    }
+
+    async updateCompany(userId, companyId) {
+        return db.query(`UPDATE users SET company_id = $1 WHERE id = $2`,
+            [companyId, userId]);
+    }
+
     async removeUser(userId) {
-        db.query("DELETE FROM users where id = $1", [userId])
+        return db.query(`DELETE FROM users where id = $1`, [userId]);
+    }
+
+    async removeCompany(userId) {
+        return this.updateCompany(userId);
     }
 }
 

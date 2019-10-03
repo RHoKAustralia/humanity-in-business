@@ -49,7 +49,26 @@ exports.getProfile = async (req, res, next) => {
         res.send(response);
     } catch (error) {
         console.log(error);
-        next(error)
+        next(error);
+    }
+    next();
+}
+
+exports.changeCompany = async (req, res, next) => {
+    try {
+        if (!req.params || !req.params.userId) {
+            return next(errs.BadRequestError('Missing userId url parameter'));
+        }
+
+        if(!req.body || !req.body.name) {
+            return next(errs.BadRequestError('Missing request name body property'));
+        }
+
+        const response = await userService.changeCompany(req.params.userId, req.body.name);
+        res.send(response);
+    } catch (error) {
+        console.log(error);
+        next(new Error('Request failed !'));
     }
     next();
 }

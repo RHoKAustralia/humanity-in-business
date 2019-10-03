@@ -5,6 +5,9 @@ const expect = require('chai').expect;
 const UserService = require('../../src/services/UserService.js');
 const userService = new UserService();
 
+const CompanyService = require('../../src/services/CompanyService.js');
+const companyService = new CompanyService();
+
 describe('Users API', function() {
 
     describe('Register user', function () {
@@ -38,6 +41,60 @@ describe('Users API', function() {
 
         after(async function() {
             await userService.removeUser(newUserId);
+        });
+    });
+
+    describe('Save user company',  function () {
+        describe('when company already exits', function () {
+            const userId = 2;
+
+            it('should return new user company', async function() {
+                await request(server)
+                    .put(`/users/${userId}/company`)
+                    .send({
+                        name: "The Great Wizards Company"
+                    })
+                    .set('Content-Type', 'application/json')
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body).to.contains({
+                            id: 1,
+                            name: "The Great Wizards Company"
+                        });
+                    });
+            });
+
+            after(async function() {
+                await userService.removeCompany(userId);
+            });
+        });
+
+        describe('when company doesn\'t exits', function () {
+            const userId = 2;
+            let companyId;
+
+            it('should create new company and return new user company', async function() {
+                await request(server)
+                    .put(`/users/${userId}/company`)
+                    .send({
+                        name: "The Great Warriors Company"
+                    })
+                    .set('Content-Type', 'application/json')
+                    .expect(200)
+                    .then(res => {
+                        const company = res.body;
+                        expect(company).to.have.property('id');
+                        expect(company.id).to.be.an('Number');
+                        expect(company).to.have.property("name", "The Great Warriors Company");
+
+                        companyId = company.id;
+                    });
+            });
+
+            after(async function() {
+                await userService.removeCompany(userId);
+                await companyService.removeCompany(companyId);
+            });
         });
     });
 });

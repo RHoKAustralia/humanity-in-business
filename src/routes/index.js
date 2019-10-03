@@ -1,6 +1,5 @@
 const errs = require('restify-errors');
 
-const UserService = require('../services/UserService');
 const CompanyService = require('../services/CompanyService');
 
 const UserController = require('../controllers/UserController');
@@ -9,7 +8,6 @@ const CommunityController = require('../controllers/CommunityController');
 const EventController = require('../controllers/EventController');
 const TeamController = require('../controllers/TeamController');
 
-const userService = new UserService();
 const companyService = new CompanyService();
 
 module.exports = function (server) {
@@ -35,7 +33,7 @@ module.exports = function (server) {
                     url: req.body.url || 'Default URL',
                 };
 
-                const response = await companyService.insert(companyData);
+                const response = await companyService.saveCompany(companyData);
                 res.send(response);
             } catch (error) {
                 console.log(error)
@@ -65,6 +63,9 @@ module.exports = function (server) {
 
     // Test
     server.get('/hello/:name', HelloController.hello);
+
+    //Users
+    server.put('/users/:userId/company', UserController.changeCompany);
 
     // Login
     server.post('/login', UserController.login);
