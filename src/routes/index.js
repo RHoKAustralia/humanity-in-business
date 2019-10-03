@@ -1,6 +1,5 @@
 const errs = require('restify-errors');
 
-const UserService = require('../services/UserService');
 const CompanyService = require('../services/CompanyService');
 
 const UserController = require('../controllers/UserController');
@@ -9,36 +8,9 @@ const CommunityController = require('../controllers/CommunityController');
 const EventController = require('../controllers/EventController');
 const TeamController = require('../controllers/TeamController');
 
-const userService = new UserService();
 const companyService = new CompanyService();
 
 module.exports = function (server) {
-
-    const register = async (req, res, next) => {
-        if (req && req.body) {
-            const userData = {
-                full_name: req.body.full_name || 'Default full name',
-                email: req.body.email || 'Default email',
-                password: req.body.password || 'Default password',
-                title: req.body.title || 'Default title',
-                image_url: req.body.image_url || 'Default image URL',
-                company_id: req.body.company_id || 1,
-            };
-
-            try {
-                const response = await userService.register(userData);
-                res.send(response);
-            } catch (error) {
-                //TODO: Return Http 409 on user exists with same email
-                next(error)
-            }
-        } else {
-            next(new errs.BadRequestError('Invalid request'));
-        }
-
-        next();
-    }
-
     // Companies
     const getCompany = async (req, res, next) => {
         try {
@@ -61,7 +33,7 @@ module.exports = function (server) {
                     url: req.body.url || 'Default URL',
                 };
 
-                const response = await companyService.insert(companyData);
+                const response = await companyService.saveCompany(companyData);
                 res.send(response);
             } catch (error) {
                 console.log(error)
@@ -92,11 +64,14 @@ module.exports = function (server) {
     // Test
     server.get('/hello/:name', HelloController.hello);
 
+    //Users
+    server.put('/users/:userId/company', UserController.changeCompany);
+
     // Login
     server.post('/login', UserController.login);
 
     // Register
-    server.post('/register', register);
+    server.post('/register', UserController.register);
 
     // Profile Page
     server.get('/profile/:profileId', UserController.getProfile);

@@ -10,6 +10,8 @@ create table if not exists companies
   url       varchar(255),
   image_url varchar(255)
 );
+create unique index companies_name_uindex
+    on companies (name);
 
 -- Users
 create table if not exists users
@@ -27,6 +29,9 @@ create table if not exists users
     on delete cascade,
   password   varchar(255) not null
 );
+
+create unique index users_email_uindex
+    on users (email);
 
 -- Communities
 create table if not exists communities
@@ -104,6 +109,7 @@ create table if not exists teams_members
 
 -- Insert Data
 INSERT INTO companies (id, name, url, image_url) VALUES (1, 'The Great Wizards Company', 'http://thegreatwizards.org', 'http://thegreatwizards.org/logo');
+SELECT setval('companies_id_seq', (SELECT MAX(id) from "companies"));
 
 INSERT INTO users (id, company_id, full_name, email, title, image_url, password) VALUES (1, 1, 'Gandalf The Grey', 'gandalf@theshire.com', 'Wizard', 'https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg', MD5('You should not pass'));
 INSERT INTO users (id, full_name, email, title, image_url, password) VALUES (2, 'Aragorn', 'aragorn@theshire.com', 'King of Gondor', null, MD5('Strider'));

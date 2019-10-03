@@ -23,7 +23,7 @@
   "scripts": {
     "start": "node_modules/nodemon/bin/nodemon.js src/index.js",
     "dev": "node_modules/nodemon/bin/nodemon.js src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha ./test/**/*.test.js --exit",
     "e2e": "POSTGRES_SSL_MODE_REQUIRED=false mocha ./test/e2e/*.spec.js --exit",
     "test-db": "./test/e2e/launchTestDb.sh",
     "e2e-with-db": "npm run test-db && npm run e2e"
