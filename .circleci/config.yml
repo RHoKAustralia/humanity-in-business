@@ -5,7 +5,13 @@ workflows:
   heroku_deploy:
     jobs:
     - build
-    - deploy:
+    - deploy-dev:
+        requires:
+          - build
+        filters:
+          branches:
+            only: dev
+    - deploy-prod:
         requires:
           - build
         filters:
@@ -48,10 +54,22 @@ jobs:
           name: e2e Tests
           command: sudo DATABASE_URL=$TEST_DATABASE_URL npm run e2e
 
-  deploy:
+  deploy-dev:
+    executor: heroku/default # Uses the basic buildpack-deps image, which has the prerequisites for installing heroku's CLI.
+    environment:
+      HEROKU_APP_NAME: HEROKU_APP_${CIRCLE_BRANCH}
+    steps:
+      - checkout
+      - heroku/install # Runs the heroku install command, if necessary.
+      - heroku/deploy-via-git:
+          app-name: $HEROKU_APP_DEV
+
+  deploy-prod:
     executor: heroku/default # Uses the basic buildpack-deps image, which has the prerequisites for installing heroku's CLI.
     steps:
-    - checkout
-    - heroku/install # Runs the heroku install command, if necessary.
-    - heroku/deploy-via-git: # Deploys branch to Heroku via git push.
-        only-branch: master
+      - checkout
+      - heroku/install # Runs the heroku install command, if necessary.
+      - heroku/deploy-via-git:
+          app-name: $HEROKU_APP_PROD
+
+
