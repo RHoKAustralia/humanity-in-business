@@ -63,7 +63,6 @@ jobs:
       - heroku/install # Runs the heroku install command, if necessary.
       - heroku/deploy-via-git:
           app-name: $HEROKU_APP_DEV
-          force: true
 
   deploy-prod:
     executor: heroku/default # Uses the basic buildpack-deps image, which has the prerequisites for installing heroku's CLI.
