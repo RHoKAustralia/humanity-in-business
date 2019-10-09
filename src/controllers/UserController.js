@@ -71,4 +71,15 @@ exports.changeCompany = async (req, res, next) => {
         next(new Error('Request failed !'));
     }
     next();
-}
+};
+
+exports.getUserProfile = async (req, res, next) => {
+    try {
+        const userDetails = await userService.getUserProfile(req.params.userId);
+        res.send(userDetails);
+    } catch (e) {
+        console.log(e);
+        next(new Error('Request failed !'));
+    }
+    next();
+};

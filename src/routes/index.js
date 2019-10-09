@@ -66,6 +66,7 @@ module.exports = function (server) {
 
     //Users
     server.put('/users/:userId/company', UserController.changeCompany);
+    server.get('/users/:userId/profile', UserController.getUserProfile);
 
     // Login
     server.post('/login', UserController.login);
@@ -74,6 +75,7 @@ module.exports = function (server) {
     server.post('/register', UserController.register);
 
     // Profile Page
+    //TODO: To deprecate
     server.get('/profile/:profileId', UserController.getProfile);
 
     // Communities
