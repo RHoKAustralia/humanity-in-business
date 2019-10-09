@@ -74,10 +74,6 @@ module.exports = function (server) {
     // Register
     server.post('/register', UserController.register);
 
-    // Profile Page
-    //TODO: To deprecate
-    server.get('/profile/:profileId', UserController.getProfile);
-
     // Communities
     server.get('/communities', CommunityController.getCommunities);
     server.get('/communities/:communityId', CommunityController.getCommunity);

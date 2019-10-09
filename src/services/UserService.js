@@ -50,22 +50,6 @@ class UserService {
         };
     }
 
-    //TODO: Deprecate
-    async getProfile(profileId) {
-        try {
-            const {rows} = await db.query('select u.full_name, u.email, u.title, u.image_url, c.id as company_id, c.name as company_name,  ' +
-                'c.url, c.image_url from users u join companies c on u.company_id = c.id where u.id =  $1',
-                [profileId]);
-            const profile = rows[0];
-            profile.total_points = 0;
-
-            return profile
-        } catch (error) {
-            console.log(error)
-            throw  Error('Failed to get profile')
-        }
-    }
-
     /**
      * Changes user company using company name.
      * Creates a new company if none is found.
