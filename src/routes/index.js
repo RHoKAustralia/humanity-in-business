@@ -66,15 +66,13 @@ module.exports = function (server) {
 
     //Users
     server.put('/users/:userId/company', UserController.changeCompany);
+    server.get('/users/:userId/profile', UserController.getUserProfile);
 
     // Login
     server.post('/login', UserController.login);
 
     // Register
     server.post('/register', UserController.register);
-
-    // Profile Page
-    server.get('/profile/:profileId', UserController.getProfile);
 
     // Communities
     server.get('/communities', CommunityController.getCommunities);

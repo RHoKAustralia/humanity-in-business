@@ -11,7 +11,7 @@ const companyService = new CompanyService();
 describe('Users API', function() {
 
     describe('Register user', function () {
-        let newUserId
+        let newUserId;
         it('should create new user', async function () {
             newUserId = await request(server)
                 .post('/register')
@@ -95,6 +95,28 @@ describe('Users API', function() {
                 await userService.removeCompany(userId);
                 await companyService.removeCompany(companyId);
             });
+        });
+    });
+
+    describe('Get user details', function () {
+        it('should return a 200 with user details', async function () {
+            await request(server)
+                .get('/users/1/profile')
+                .set('Content-Type', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body).to.deep.equal({
+                        id: 1,
+                        full_name: "Gandalf The Grey",
+                        title: "Wizard",
+                        image_url: "https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg",
+                        hours: 50,
+                        communities: [{
+                            id: 1,
+                            name: "The Community of the Ring"
+                        }]
+                    });
+                });
         });
     });
 });
