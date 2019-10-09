@@ -67,6 +67,7 @@ module.exports = function (server) {
     //Users
     server.put('/users/:userId/company', UserController.changeCompany);
     server.get('/users/:userId/profile', UserController.getUserProfile);
+    server.get('/users/:userId/events', UserController.getUserEvents);
 
     // Login
     server.post('/login', UserController.login);
@@ -91,4 +92,4 @@ module.exports = function (server) {
     server.get('/company/:id', getCompany);
     server.get('/company', getAllCompanies);
     server.post('/company', postCompany);
-}
+};

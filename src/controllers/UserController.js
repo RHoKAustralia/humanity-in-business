@@ -74,3 +74,15 @@ exports.getUserProfile = async (req, res, next) => {
     }
     next();
 };
+
+exports.getUserEvents = async (req, res, next) => {
+    try {
+        const events = await userService.getUserEvents(req.params.userId);
+        res.send(events);
+    } catch (e) {
+        console.log(e);
+        next(new Error('Request failed !'));
+    }
+    next();
+};
+

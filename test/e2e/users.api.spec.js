@@ -119,4 +119,26 @@ describe('Users API', function() {
                 });
         });
     });
+
+    describe('Get user events', function () {
+        it('should return a 200 and user events', async function () {
+            await request(server)
+                .get('/users/1/events')
+                .set('Content-Type', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body).to.deep.equal([
+                        {
+                            id: 1,
+                            community_id: 1,
+                            name: 'The Rivendell assembly',
+                            hours: 50,
+                            description: 'Save the Middle Earth',
+                            image_url: 'http://lotr.org/rivendell.jpg',
+                            date: '1954-07-29T00:00:00.000Z'
+                        }
+                    ]);
+                });
+        });
+    })
 });
