@@ -64,6 +64,15 @@ class UserService {
         return company;
     }
 
+    async getUserEvents(userId) {
+        const {rows} = await db.query(`SELECT e.* FROM teams_members tm
+                    JOIN teams t on tm.team_id = t.id
+                    JOIN events e on t.event_id = e.id
+                    WHERE user_id = $1`,
+            [userId]);
+        return rows;
+    }
+
     async getUser(userId) {
         const {rows} = await db.query(`SELECT id, full_name, title, image_url FROM users WHERE id = $1`,
             [userId]);
