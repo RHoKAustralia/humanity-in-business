@@ -113,6 +113,13 @@ class UserService {
     async removeCompany(userId) {
         return this.updateCompany(userId);
     }
+
+    async updateUserImageUrl(imageUrl, userId) {
+        const {rows} = await db.query(`UPDATE users u SET image_url = $1 WHERE id = $2
+                    RETURNING u.id, u.full_name, u.email, u.title, u.image_url, u.company_id`,
+            [imageUrl, userId]);
+        return rows[0];
+    }
 }
 
 module.exports = UserService;
