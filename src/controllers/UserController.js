@@ -86,3 +86,13 @@ exports.getUserEvents = async (req, res, next) => {
     next();
 };
 
+exports.updateUser = async (req, res, next) => {
+    try {
+        const updatedUser = await userService.updateUserImageUrl(req.body.image_url, req.params.userId);
+        res.send(updatedUser);
+    } catch (e) {
+        console.log(e);
+        next(new Error('Request failed !'));
+    }
+    next();
+};

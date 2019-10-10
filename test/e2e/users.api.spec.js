@@ -140,5 +140,36 @@ describe('Users API', function() {
                     ]);
                 });
         });
-    })
+    });
+
+    describe('Update User details', function () {
+        describe('Update image url', function () {
+            const newImageUrl = 'http://myImage.jpg';
+            const oldImageUrl = 'https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg';
+
+            it('should return user with updated image', async function () {
+                await request(server)
+                    .patch('/users/1')
+                    .send({
+                        image_url: newImageUrl
+                    })
+                    .set('Content-Type', 'application/json')
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body).to.deep.equal({
+                            id:1,
+                            company_id: 1,
+                            full_name: 'Gandalf The Grey',
+                            email: 'gandalf@theshire.com',
+                            title: 'Wizard',
+                            image_url: newImageUrl,
+                        });
+                    });
+            });
+
+            after(async function() {
+                await userService.updateUserImageUrl(oldImageUrl, 1);
+            });
+        });
+    });
 });

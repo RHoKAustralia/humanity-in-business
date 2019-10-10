@@ -68,6 +68,7 @@ module.exports = function (server) {
     server.put('/users/:userId/company', UserController.changeCompany);
     server.get('/users/:userId/profile', UserController.getUserProfile);
     server.get('/users/:userId/events', UserController.getUserEvents);
+    server.patch('/users/:userId', UserController.updateUser);
 
     // Login
     server.post('/login', UserController.login);
