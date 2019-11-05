@@ -43,16 +43,7 @@ exports.login = async function (req, res, next) {
     next();
 };
 
-exports.getProfile = async (req, res, next) => {
-    try {
-        const response = await userService.getProfile(req.params.profileId);
-        res.send(response);
-    } catch (error) {
-        console.log(error);
-        next(error);
-    }
-    next();
-}
+
 
 exports.changeCompany = async (req, res, next) => {
     try {
@@ -71,4 +62,37 @@ exports.changeCompany = async (req, res, next) => {
         next(new Error('Request failed !'));
     }
     next();
-}
+};
+
+exports.getUserProfile = async (req, res, next) => {
+    try {
+        const userDetails = await userService.getUserProfile(req.params.userId);
+        res.send(userDetails);
+    } catch (e) {
+        console.log(e);
+        next(new Error('Request failed !'));
+    }
+    next();
+};
+
+exports.getUserEvents = async (req, res, next) => {
+    try {
+        const events = await userService.getUserEvents(req.params.userId);
+        res.send(events);
+    } catch (e) {
+        console.log(e);
+        next(new Error('Request failed !'));
+    }
+    next();
+};
+
+exports.updateUser = async (req, res, next) => {
+    try {
+        const updatedUser = await userService.updateUserImageUrl(req.body.image_url, req.params.userId);
+        res.send(updatedUser);
+    } catch (e) {
+        console.log(e);
+        next(new Error('Request failed !'));
+    }
+    next();
+};

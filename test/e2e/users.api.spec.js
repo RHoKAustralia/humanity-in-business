@@ -11,7 +11,7 @@ const companyService = new CompanyService();
 describe('Users API', function() {
 
     describe('Register user', function () {
-        let newUserId
+        let newUserId;
         it('should create new user', async function () {
             newUserId = await request(server)
                 .post('/register')
@@ -94,6 +94,81 @@ describe('Users API', function() {
             after(async function() {
                 await userService.removeCompany(userId);
                 await companyService.removeCompany(companyId);
+            });
+        });
+    });
+
+    describe('Get user details', function () {
+        it('should return a 200 with user details', async function () {
+            await request(server)
+                .get('/users/1/profile')
+                .set('Content-Type', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body).to.deep.equal({
+                        id: 1,
+                        full_name: "Gandalf The Grey",
+                        title: "Wizard",
+                        image_url: "https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg",
+                        hours: 50,
+                        communities: [{
+                            id: 1,
+                            name: "The Community of the Ring"
+                        }]
+                    });
+                });
+        });
+    });
+
+    describe('Get user events', function () {
+        it('should return a 200 and user events', async function () {
+            await request(server)
+                .get('/users/1/events')
+                .set('Content-Type', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body).to.deep.equal([
+                        {
+                            id: 1,
+                            community_id: 1,
+                            name: 'The Rivendell assembly',
+                            hours: 50,
+                            description: 'Save the Middle Earth',
+                            image_url: 'http://lotr.org/rivendell.jpg',
+                            date: '1954-07-29T00:00:00.000Z'
+                        }
+                    ]);
+                });
+        });
+    });
+
+    describe('Update User details', function () {
+        describe('Update image url', function () {
+            const newImageUrl = 'http://myImage.jpg';
+            const oldImageUrl = 'https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg';
+
+            it('should return user with updated image', async function () {
+                await request(server)
+                    .patch('/users/1')
+                    .send({
+                        image_url: newImageUrl
+                    })
+                    .set('Content-Type', 'application/json')
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body).to.deep.equal({
+                            id:1,
+                            company_id: 1,
+                            full_name: 'Gandalf The Grey',
+                            email: 'gandalf@theshire.com',
+                            title: 'Wizard',
+                            image_url: newImageUrl,
+                        });
+                    });
+            });
+
+            after(async function() {
+                await userService.updateUserImageUrl(oldImageUrl, 1);
             });
         });
     });

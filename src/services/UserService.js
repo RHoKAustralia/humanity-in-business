@@ -38,19 +38,16 @@ class UserService {
         return rows[0]
     }
 
-    async getProfile(profileId) {
-        try {
-            const {rows} = await db.query('select u.full_name, u.email, u.title, u.image_url, c.id as company_id, c.name as company_name,  ' +
-                'c.url, c.image_url from users u join companies c on u.company_id = c.id where u.id =  $1',
-                [profileId]);
-            const profile = rows[0];
-            profile.total_points = 0;
+    async getUserProfile(userId) {
+        const user = await this.getUser(userId);
+        const communities = await this.getUserCommunities(userId);
+        const hours = await this.getUserHours(userId);
 
-            return profile
-        } catch (error) {
-            console.log(error)
-            throw  Error('Failed to get profile')
-        }
+        return {
+            ...user,
+            hours,
+            communities
+        };
     }
 
     /**
@@ -67,6 +64,43 @@ class UserService {
         return company;
     }
 
+    async getUserEvents(userId) {
+        const {rows} = await db.query(`SELECT e.* FROM teams_members tm
+                    JOIN teams t on tm.team_id = t.id
+                    JOIN events e on t.event_id = e.id
+                    WHERE user_id = $1`,
+            [userId]);
+        return rows;
+    }
+
+    async getUser(userId) {
+        const {rows} = await db.query(`SELECT id, full_name, title, image_url FROM users WHERE id = $1`,
+            [userId]);
+
+        return rows[0];
+    }
+
+    async getUserCommunities(userId) {
+        const {rows} = await db.query(`SELECT c.id, c.name FROM teams_members tm
+                    JOIN teams t on tm.team_id = t.id
+                    JOIN events e on t.event_id = e.id
+                    JOIN communities c on e.community_id = c.id
+                    WHERE user_id = $1
+                    GROUP BY user_id, c.id`,
+            [userId]);
+        return rows;
+    }
+
+    async getUserHours(userId) {
+        const {rows} = await db.query(`SELECT SUM(e.hours) as hours FROM teams_members tm
+                    JOIN teams t on tm.team_id = t.id
+                    JOIN events e on t.event_id = e.id
+                    WHERE user_id = $1
+                    GROUP BY user_id`,
+            [userId]);
+        return rows[0] ? rows[0].hours : 0;
+    }
+
     async updateCompany(userId, companyId) {
         return db.query(`UPDATE users SET company_id = $1 WHERE id = $2`,
             [companyId, userId]);
@@ -78,6 +112,13 @@ class UserService {
 
     async removeCompany(userId) {
         return this.updateCompany(userId);
+    }
+
+    async updateUserImageUrl(imageUrl, userId) {
+        const {rows} = await db.query(`UPDATE users u SET image_url = $1 WHERE id = $2
+                    RETURNING u.id, u.full_name, u.email, u.title, u.image_url, u.company_id`,
+            [imageUrl, userId]);
+        return rows[0];
     }
 }
 
