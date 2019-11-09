@@ -96,3 +96,14 @@ exports.updateUser = async (req, res, next) => {
     }
     next();
 };
+
+exports.getCommunities = async (req, res, next) => {
+    try {
+        const communities = await userService.getUserCommunities(req.params.userId);
+        res.send(communities);
+    } catch (e) {
+        console.log(e);
+        next(new Error('Request failed !'));
+    }
+    next();
+};

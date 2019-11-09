@@ -113,7 +113,9 @@ describe('Users API', function() {
                         hours: 50,
                         communities: [{
                             id: 1,
-                            name: "The Community of the Ring"
+                            name: "The Community of the Ring",
+                            description: 'Save the Middle Earth',
+                            image_url: 'http://lotr.org/rivendell.jpg',
                         }]
                     });
                 });
@@ -172,4 +174,23 @@ describe('Users API', function() {
             });
         });
     });
+
+    describe('Get User communities', function () {
+        it('should return user communities', async function () {
+            await request(server)
+                .get('/users/1/communities')
+                .set('Content-Type', 'application/json')
+                .expect(200)
+                .then(res => {
+                    expect(res.body).to.be.an('Array');
+                    expect(res.body).to.have.lengthOf(1);
+                    expect(res.body[0]).to.include({
+                        id: 1,
+                        name: 'The Community of the Ring',
+                        description: 'Save the Middle Earth',
+                        image_url: 'http://lotr.org/rivendell.jpg',
+                    })
+                })
+        })
+    })
 });
