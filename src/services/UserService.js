@@ -81,7 +81,7 @@ class UserService {
     }
 
     async getUserCommunities(userId) {
-        const {rows} = await db.query(`SELECT c.id, c.name FROM teams_members tm
+        const {rows} = await db.query(`SELECT c.* FROM teams_members tm
                     JOIN teams t on tm.team_id = t.id
                     JOIN events e on t.event_id = e.id
                     JOIN communities c on e.community_id = c.id
