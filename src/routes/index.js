@@ -85,6 +85,8 @@ module.exports = function (server) {
 
     // Events
     server.get('/events/:eventId/teams', EventController.getTeams);
+    server.get('/events/:eventId/members', EventController.getMembers);
+
 
     // Teams
     server.post('/teams/:teamId/members', TeamController.addMember);
