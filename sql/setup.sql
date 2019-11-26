@@ -27,7 +27,9 @@ create table if not exists users
     constraint users_company
     references companies
     on delete cascade,
-  password   varchar(255) not null
+  password   varchar(255) not null,
+  why_join_hib text,
+  yearly_days_pledged int
 );
 
 create unique index users_email_uindex

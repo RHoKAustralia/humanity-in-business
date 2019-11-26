@@ -120,6 +120,13 @@ class UserService {
             [imageUrl, userId]);
         return rows[0];
     }
+
+    async udpdateHibDetails(userId, whyJoinHib, yearlyDaysPledged) {
+        const {rows} = await db.query(`UPDATE users u SET why_join_hib = $2, yearly_days_pledged=$3  WHERE id = $1
+                    RETURNING u.why_join_hib, u.yearly_days_pledged`,
+            [userId, whyJoinHib, yearlyDaysPledged]);
+        return rows[0];
+    }
 }
 
 module.exports = UserService;

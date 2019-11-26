@@ -98,7 +98,7 @@ describe('Users API', function() {
         });
     });
 
-    describe('Get user details', function () {
+    describe('Get user profile', function () {
         it('should return a 200 with user details', async function () {
             await request(server)
                 .get('/users/1/profile')
@@ -141,6 +141,49 @@ describe('Users API', function() {
                         }
                     ]);
                 });
+        });
+    });
+
+    describe('Update/Create hib details', function () {
+        describe('should return 400 if hib-details are missing', function () {
+            const userId = 1;
+            it('should return the reason to join hib for a user', async function() {
+                await request(server)
+                    .post(`/users/${userId}/hib-details`)
+                    .set('Content-Type', 'application/json')
+                    .expect(400)
+                    .then(res => {
+                        expect(res.body).to.have.property('message', 'Missing why_join_hib property in request body');
+                    })
+            });
+
+            after(async function() {
+                await userService.udpdateHibDetails(userId, null);
+            });
+        });
+
+        describe('Update reason to join hib', function () {
+            const userId = 1;
+            it('should return the reason to join hib for a user', async function() {
+                await request(server)
+                    .post(`/users/${userId}/hib-details`)
+                    .send({
+                        why_join_hib: "This is an awesome project !!!",
+                        yearly_days_pledged: 20
+                    })
+                    .set('Content-Type', 'application/json')
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body).to.deep.equal({
+                            why_join_hib: "This is an awesome project !!!",
+                            yearly_days_pledged: 20
+                        })
+                    })
+            });
+
+            after(async function() {
+                await userService.udpdateHibDetails(userId, null);
+            });
         });
     });
 

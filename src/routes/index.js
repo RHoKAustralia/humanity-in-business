@@ -17,12 +17,12 @@ module.exports = function (server) {
             const response = await companyService.getCompany(req.params.id);
             res.send(response);
         } catch (error) {
-            console.log(error)
-            next(error)
+            console.log(error);
+            next(error);
         }
 
         next();
-    }
+    };
 
     const postCompany = async (req, res, next) => {
 
@@ -36,8 +36,8 @@ module.exports = function (server) {
                 const response = await companyService.saveCompany(companyData);
                 res.send(response);
             } catch (error) {
-                console.log(error)
-                next(error)
+                console.log(error);
+                next(error);
             }
 
         } else {
@@ -45,19 +45,19 @@ module.exports = function (server) {
         }
 
         next();
-    }
+    };
 
     const getAllCompanies = async (req, res, next) => {
         try {
             const response = await companyService.getAllCompanies();
             res.send(response);
         } catch (error) {
-            console.log(error)
-            next(error)
+            console.log(error);
+            next(error);
         }
 
         next();
-    }
+    };
 
     //TODO: Protect all endpoints except login with an Authorization token
 
@@ -68,8 +68,9 @@ module.exports = function (server) {
     server.put('/users/:userId/company', UserController.changeCompany);
     server.get('/users/:userId/profile', UserController.getUserProfile);
     server.get('/users/:userId/events', UserController.getUserEvents);
-    server.get('/users/:userId/communities', UserController.getCommunities)
+    server.get('/users/:userId/communities', UserController.getCommunities);
     server.patch('/users/:userId', UserController.updateUser);
+    server.post('/users/:userId/hib-details', UserController.updateHibDetails);
 
     // Login
     server.post('/login', UserController.login);
