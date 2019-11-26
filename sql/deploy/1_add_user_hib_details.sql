@@ -6,7 +6,7 @@ alter table users
 
 create table if not exists deploy
 (
-    version varchar(6) not null
+    version int not null
         constraint deploy_pk
             primary key,
     created_at timestamp not null default now(),
