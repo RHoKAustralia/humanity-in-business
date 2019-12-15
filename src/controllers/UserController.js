@@ -45,17 +45,21 @@ exports.login = async function (req, res, next) {
 
 
 
-exports.changeCompany = async (req, res, next) => {
+exports.updateJobDetails = async (req, res, next) => {
     try {
         if (!req.params || !req.params.userId) {
             return next(new errs.BadRequestError('Missing userId url parameter'));
         }
 
-        if(!req.body || !req.body.name) {
-            return next(new errs.BadRequestError('Missing request name body property'));
+        if(!req.body || !req.body.company_name) {
+            return next(new errs.BadRequestError('Missing request company name body property'));
         }
 
-        const response = await userService.changeCompany(req.params.userId, req.body.name);
+        if(!req.body || !req.body.title) {
+            return next(new errs.BadRequestError('Missing request company name body title'));
+        }
+
+        const response = await userService.updateJobDetails(req.params.userId, req.body.company_name, req.body.title);
         res.send(response);
     } catch (error) {
         console.log(error);

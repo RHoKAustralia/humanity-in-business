@@ -65,7 +65,7 @@ module.exports = function (server) {
     server.get('/hello/:name', HelloController.hello);
 
     //Users
-    server.put('/users/:userId/company', UserController.changeCompany);
+    server.post('/users/:userId/job-details', UserController.updateJobDetails);
     server.get('/users/:userId/profile', UserController.getUserProfile);
     server.get('/users/:userId/events', UserController.getUserEvents);
     server.get('/users/:userId/communities', UserController.getCommunities);

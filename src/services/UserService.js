@@ -50,6 +50,16 @@ class UserService {
         };
     }
 
+    async updateJobDetails(userId, companyName, title) {
+        const company = await this.changeCompany(userId, companyName);
+        await this.updateTitle(userId, title);
+        return {
+            company_id: company.id,
+            company_name: company.name,
+            title: title
+        }
+    }
+
     /**
      * Changes user company using company name.
      * Creates a new company if none is found.
@@ -104,6 +114,10 @@ class UserService {
     async updateCompany(userId, companyId) {
         return db.query(`UPDATE users SET company_id = $1 WHERE id = $2`,
             [companyId, userId]);
+    }
+
+    async updateTitle(userId, title) {
+        return db.query(`UPDATE users SET title = $1 WHERE id = $2`, [title, userId])
     }
 
     async removeUser(userId) {
