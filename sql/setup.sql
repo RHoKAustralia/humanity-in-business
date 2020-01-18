@@ -60,7 +60,8 @@ create table if not exists events
     on delete cascade,
   description  varchar(255),
   image_url    varchar(255),
-  date         timestamp with time zone
+  date         timestamp with time zone,
+  location     varchar(255)
 );
 
 -- Projects
@@ -121,7 +122,7 @@ SELECT setval('users_id_seq', (SELECT MAX(id) from "users"));
 INSERT INTO communities(id, name, description, image_url) VALUES (1, 'The Community of the Ring', 'Save the Middle Earth', 'http://lotr.org/rivendell.jpg');
 SELECT setval('communities_id_seq', (SELECT MAX(id) from "communities"));
 
-INSERT INTO events(id, name, hours, community_id, description, image_url, date) VALUES (1, 'The Rivendell assembly', 50, 1,'Save the Middle Earth', 'http://lotr.org/rivendell.jpg', '1954-07-29 00:00:00+00');
+INSERT INTO events(id, name, hours, community_id, description, image_url, date, location) VALUES (1, 'The Rivendell assembly', 50, 1,'Save the Middle Earth', 'http://lotr.org/rivendell.jpg', '1954-07-29 00:00:00+00', 'Rivendell');
 INSERT INTO events(id, name, hours, community_id, description, date) VALUES (2, 'Bilbo Birthday', 8, 1,'Bilbo Birthday', '1954-07-29 00:00:00+00');
 SELECT setval('events_id_seq', (SELECT MAX(id) from "events"));
 

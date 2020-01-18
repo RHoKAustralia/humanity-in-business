@@ -147,7 +147,8 @@ describe('Users API', function () {
                             hours: 50,
                             description: 'Save the Middle Earth',
                             image_url: 'http://lotr.org/rivendell.jpg',
-                            date: '1954-07-29T00:00:00.000Z'
+                            date: '1954-07-29T00:00:00.000Z',
+                            location: 'Rivendell'
                         }
                     ]);
                 });
