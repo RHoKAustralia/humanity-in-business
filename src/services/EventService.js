@@ -21,7 +21,8 @@ class EventService {
     }
 
     async getMembers(eventId) {
-        const {rows} = await db.query(`SELECT u.id as user_id, u.full_name, u.title, u.image_url, t.id as team_id,
+        const {rows} = await db.query(`SELECT u.id as user_id, u.full_name, u.title, c.name as company_name, u.image_url,
+               t.id as team_id,
                p.id as project_id, p.name as project_name, p.image_url as project_image_url, p.owner as project_owner,
                p.description as project_description
                FROM users u 
@@ -29,6 +30,7 @@ class EventService {
                join teams t on tm.team_id = t.id
                join events e on t.event_id = e.id
                join projects p on t.project_id = p.id
+               join companies c on u.company_id = c.id
                where e.id = $1`, [eventId]);
 
         return rows;
