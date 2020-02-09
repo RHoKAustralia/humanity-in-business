@@ -120,7 +120,14 @@ describe('Users API', function () {
                         full_name: "Gandalf The Grey",
                         title: "Wizard",
                         image_url: "https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg",
-                        hours: 50,
+                        contributed_hours: 50,
+                        why_join_hib: null,
+                        yearly_days_pledged: null,
+                        projects: [{
+                            id: 1,
+                            name: 'Save the Middle Earth',
+                            image_url: 'http://lotr.org/rivendell.jpg'
+                        }],
                         communities: [{
                             id: 1,
                             name: "The Community of the Ring",
