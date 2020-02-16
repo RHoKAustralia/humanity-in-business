@@ -71,7 +71,7 @@ create table if not exists projects
     constraint projects_pkey
     primary key,
   name        varchar(255) not null,
-  description varchar(255),
+  description varchar(512),
   owner       varchar(255),
   image_url   varchar(255)
 );
