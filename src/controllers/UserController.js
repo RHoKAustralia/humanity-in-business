@@ -10,7 +10,7 @@ exports.register = async (req, res, next) => {
             res.send(response);
         } catch (error) {
             //TODO: Return Http 409 on user exists with same email
-            console.log(error)
+            console.log(error);
             next(new Error("Failed to register user"))
         }
     } else {
@@ -18,7 +18,7 @@ exports.register = async (req, res, next) => {
     }
 
     next();
-}
+};
 
 exports.login = async function (req, res, next) {
     if (req && req.body) {
@@ -45,17 +45,21 @@ exports.login = async function (req, res, next) {
 
 
 
-exports.changeCompany = async (req, res, next) => {
+exports.updateJobDetails = async (req, res, next) => {
     try {
         if (!req.params || !req.params.userId) {
-            return next(errs.BadRequestError('Missing userId url parameter'));
+            return next(new errs.BadRequestError('Missing userId url parameter'));
         }
 
-        if(!req.body || !req.body.name) {
-            return next(errs.BadRequestError('Missing request name body property'));
+        if(!req.body || !req.body.company_name) {
+            return next(new errs.BadRequestError('Missing request company name body property'));
         }
 
-        const response = await userService.changeCompany(req.params.userId, req.body.name);
+        if(!req.body || !req.body.title) {
+            return next(new errs.BadRequestError('Missing request company name body title'));
+        }
+
+        const response = await userService.updateJobDetails(req.params.userId, req.body.company_name, req.body.title);
         res.send(response);
     } catch (error) {
         console.log(error);
@@ -89,6 +93,24 @@ exports.getUserEvents = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
     try {
         const updatedUser = await userService.updateUserImageUrl(req.body.image_url, req.params.userId);
+        res.send(updatedUser);
+    } catch (e) {
+        console.log(e);
+        next(new Error('Request failed !'));
+    }
+    next();
+};
+
+exports.updateHibDetails = async (req, res, next) => {
+    try {
+        if(!req.body || !req.body.why_join_hib) {
+            return next(new errs.BadRequestError('Missing why_join_hib property in request body'));
+        }
+        if(!req.body.yearly_days_pledged) {
+            return next(new errs.BadRequestError('Missing yearly_days_pledged property in request body'));
+        }
+        const updatedUser = await userService.udpdateHibDetails(req.params.userId,
+            req.body.why_join_hib, req.body.yearly_days_pledged);
         res.send(updatedUser);
     } catch (e) {
         console.log(e);

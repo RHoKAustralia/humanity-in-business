@@ -43,6 +43,7 @@ describe('Events API', function () {
                         user_id: 1,
                         full_name: 'Gandalf The Grey',
                         title: 'Wizard',
+                        company_name: "The Great Wizards Company",
                         image_url: 'https://uncledanny1979.files.wordpress.com/2010/03/gandalf.jpg',
                         team_id: 1,
                         project_id: 1,

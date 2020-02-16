@@ -2,7 +2,10 @@ const md5 = require('md5');
 require('../db');
 
 const CompanyService = require('../../src/services/CompanyService.js');
+const UserRepository = require('../repository/UserRepository.js');
+
 const companyService = new CompanyService();
+const userRepository = new UserRepository();
 
 class UserService {
     login(email, encryptedPassword) {
@@ -39,15 +42,29 @@ class UserService {
     }
 
     async getUserProfile(userId) {
-        const user = await this.getUser(userId);
-        const communities = await this.getUserCommunities(userId);
-        const hours = await this.getUserHours(userId);
+        const [user, communities, contributed_hours, projects] = await Promise.all([
+            userRepository.getUser(userId),
+            userRepository.getUserCommunities(userId),
+            userRepository.getUserContributedHours(userId),
+            userRepository.getUserProjects(userId)
+        ]);
 
         return {
             ...user,
-            hours,
+            contributed_hours,
+            projects,
             communities
         };
+    }
+
+    async updateJobDetails(userId, companyName, title) {
+        const company = await this.changeCompany(userId, companyName);
+        await this.updateTitle(userId, title);
+        return {
+            company_id: company.id,
+            company_name: company.name,
+            title: title
+        }
     }
 
     /**
@@ -73,37 +90,17 @@ class UserService {
         return rows;
     }
 
-    async getUser(userId) {
-        const {rows} = await db.query(`SELECT id, full_name, title, image_url FROM users WHERE id = $1`,
-            [userId]);
-
-        return rows[0];
-    }
-
     async getUserCommunities(userId) {
-        const {rows} = await db.query(`SELECT c.* FROM teams_members tm
-                    JOIN teams t on tm.team_id = t.id
-                    JOIN events e on t.event_id = e.id
-                    JOIN communities c on e.community_id = c.id
-                    WHERE user_id = $1
-                    GROUP BY user_id, c.id`,
-            [userId]);
-        return rows;
-    }
-
-    async getUserHours(userId) {
-        const {rows} = await db.query(`SELECT SUM(e.hours) as hours FROM teams_members tm
-                    JOIN teams t on tm.team_id = t.id
-                    JOIN events e on t.event_id = e.id
-                    WHERE user_id = $1
-                    GROUP BY user_id`,
-            [userId]);
-        return rows[0] ? rows[0].hours : 0;
+        return userRepository.getUserCommunities(userId);
     }
 
     async updateCompany(userId, companyId) {
         return db.query(`UPDATE users SET company_id = $1 WHERE id = $2`,
             [companyId, userId]);
+    }
+
+    async updateTitle(userId, title) {
+        return db.query(`UPDATE users SET title = $1 WHERE id = $2`, [title, userId])
     }
 
     async removeUser(userId) {
@@ -118,6 +115,13 @@ class UserService {
         const {rows} = await db.query(`UPDATE users u SET image_url = $1 WHERE id = $2
                     RETURNING u.id, u.full_name, u.email, u.title, u.image_url, u.company_id`,
             [imageUrl, userId]);
+        return rows[0];
+    }
+
+    async udpdateHibDetails(userId, whyJoinHib, yearlyDaysPledged) {
+        const {rows} = await db.query(`UPDATE users u SET why_join_hib = $2, yearly_days_pledged=$3  WHERE id = $1
+                    RETURNING u.why_join_hib, u.yearly_days_pledged`,
+            [userId, whyJoinHib, yearlyDaysPledged]);
         return rows[0];
     }
 }
