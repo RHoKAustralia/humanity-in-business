@@ -40,6 +40,14 @@ class UserRepository {
             [userId]);
         return rows[0] ? rows[0].hours : 0;
     }
+
+    async getUserCompany(userId) {
+        const {rows} = await db.query(`SELECT c.* from users u
+                    JOIN companies c on u.company_id = c.id
+                    WHERE u.id = $1`,
+                    [userId]);
+        return rows[0];
+    }
 }
 
 module.exports = UserRepository;

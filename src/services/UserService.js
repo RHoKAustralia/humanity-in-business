@@ -5,9 +5,10 @@ const CompanyService = require('../../src/services/CompanyService.js');
 const UserRepository = require('../repository/UserRepository.js');
 
 const companyService = new CompanyService();
-const userRepository = new UserRepository();
 
 class UserService {
+    userRepository = new UserRepository();
+
     login(email, encryptedPassword) {
         return new Promise((resolve, reject) => {
             db.query('SELECT id FROM users WHERE email = $1 AND password = $2',
@@ -42,18 +43,20 @@ class UserService {
     }
 
     async getUserProfile(userId) {
-        const [user, communities, contributed_hours, projects] = await Promise.all([
-            userRepository.getUser(userId),
-            userRepository.getUserCommunities(userId),
-            userRepository.getUserContributedHours(userId),
-            userRepository.getUserProjects(userId)
+        const [user, communities, contributed_hours, projects, company] = await Promise.all([
+            this.userRepository.getUser(userId),
+            this.userRepository.getUserCommunities(userId),
+            this.userRepository.getUserContributedHours(userId),
+            this.userRepository.getUserProjects(userId),
+            this.userRepository.getUserCompany(userId)
         ]);
 
         return {
             ...user,
             contributed_hours,
             projects,
-            communities
+            communities,
+            company: company || {}
         };
     }
 
@@ -91,7 +94,7 @@ class UserService {
     }
 
     async getUserCommunities(userId) {
-        return userRepository.getUserCommunities(userId);
+        return this.userRepository.getUserCommunities(userId);
     }
 
     async updateCompany(userId, companyId) {
