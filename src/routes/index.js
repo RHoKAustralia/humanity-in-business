@@ -92,6 +92,7 @@ module.exports = function (server) {
     // Teams
     server.post('/teams/:teamId/members', TeamController.addMember);
     server.get('/teams/:teamId/members', TeamController.getMembers);
+    server.get('/teams/:teamId', TeamController.getTeam);
 
     // Companies
     server.get('/company/:id', getCompany);
