@@ -21,3 +21,13 @@ exports.getMembers = async (req, res, next) => {
         next(new Error('Failed to execute request'));
     }
 };
+
+exports.getTeam = async (req, res, next) => {
+    try {
+        const team = await teamService.getTeamById(req.params.teamId);
+        res.send(team);
+    } catch (e) {
+        console.log(e);
+        next(new Error('Failed to execute request'));
+    }
+};
