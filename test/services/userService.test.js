@@ -7,9 +7,9 @@ describe('Company Service', function () {
     describe('user profile', function () {
         it('returns a profile with a company as an empty object if not found', async function () {
             // Given
-            const userService = new UserService();
-            const stub = sinon.stub(userService.userRepository);
+            const stub = sinon.stub(UserService.userRepository);
             stub.getUserCompany = sinon.stub().resolves(undefined);
+            const userService = new UserService();
 
             const userId = 1;
 
