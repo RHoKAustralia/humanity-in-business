@@ -119,10 +119,14 @@ class UserService {
         return rows[0];
     }
 
-    async udpdateHibDetails(userId, whyJoinHib, yearlyDaysPledged) {
-        const {rows} = await db.query(`UPDATE users u SET why_join_hib = $2, yearly_days_pledged=$3  WHERE id = $1
-                    RETURNING u.why_join_hib, u.yearly_days_pledged`,
-            [userId, whyJoinHib, yearlyDaysPledged]);
+    async udpdateHibDetails(userId, hibDetails) {
+        const { whyJoinHib, yearlyDaysPledged, yearlyDonationsPledge } = hibDetails || {};
+
+        const {rows} = await db.query(`UPDATE users u 
+                    SET why_join_hib = $2, yearly_days_pledged=$3, yearly_donations_pledge=$4  
+                    WHERE id = $1
+                    RETURNING u.why_join_hib, u.yearly_days_pledged, u.yearly_donations_pledge`,
+            [userId, whyJoinHib, yearlyDaysPledged, yearlyDonationsPledge]);
         return rows[0];
     }
 }

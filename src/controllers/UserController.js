@@ -109,8 +109,15 @@ exports.updateHibDetails = async (req, res, next) => {
         if(!req.body.yearly_days_pledged) {
             return next(new errs.BadRequestError('Missing yearly_days_pledged property in request body'));
         }
-        const updatedUser = await userService.udpdateHibDetails(req.params.userId,
-            req.body.why_join_hib, req.body.yearly_days_pledged);
+        if(!req.body.yearly_donations_pledge) {
+            return next(new errs.BadRequestError('Missing yearly_donations_pledge property in request body'));
+        }
+        const hibDetails = {
+            whyJoinHib: req.body.why_join_hib,
+            yearlyDaysPledged: req.body.yearly_days_pledged,
+            yearlyDonationsPledge: req.body.yearly_donations_pledge,
+        }
+        const updatedUser = await userService.udpdateHibDetails(req.params.userId, hibDetails);
         res.send(updatedUser);
     } catch (e) {
         console.log(e);
