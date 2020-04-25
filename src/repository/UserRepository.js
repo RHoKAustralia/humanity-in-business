@@ -2,7 +2,7 @@ require('../db');
 
 class UserRepository {
     async getUser(userId) {
-        const {rows} = await db.query(`SELECT id, full_name, title, image_url, why_join_hib, yearly_days_pledged
+        const {rows} = await db.query(`SELECT id, full_name, title, image_url, why_join_hib, yearly_days_pledged, yearly_donations_pledge
                                        FROM users
                                        WHERE id = $1`,
             [userId]);
