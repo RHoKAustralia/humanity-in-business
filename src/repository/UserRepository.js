@@ -2,7 +2,7 @@ require('../db');
 
 class UserRepository {
     async getUser(userId) {
-        const {rows} = await db.query(`SELECT id, full_name, title, image_url, why_join_hib, yearly_days_pledged
+        const {rows} = await db.query(`SELECT id, full_name, title, image_url, why_join_hib, yearly_days_pledged, yearly_donations_pledge
                                        FROM users
                                        WHERE id = $1`,
             [userId]);
@@ -39,6 +39,14 @@ class UserRepository {
                     GROUP BY user_id`,
             [userId]);
         return rows[0] ? rows[0].hours : 0;
+    }
+
+    async getUserCompany(userId) {
+        const {rows} = await db.query(`SELECT c.* from users u
+                    JOIN companies c on u.company_id = c.id
+                    WHERE u.id = $1`,
+                    [userId]);
+        return rows[0];
     }
 }
 

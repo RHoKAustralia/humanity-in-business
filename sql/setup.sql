@@ -29,7 +29,8 @@ create table if not exists users
     on delete cascade,
   password   varchar(255) not null,
   why_join_hib text,
-  yearly_days_pledged int
+  yearly_days_pledged int,
+  yearly_donations_pledge int
 );
 
 create unique index users_email_uindex
@@ -71,7 +72,7 @@ create table if not exists projects
     constraint projects_pkey
     primary key,
   name        varchar(255) not null,
-  description varchar(255),
+  description varchar(512),
   owner       varchar(255),
   image_url   varchar(255)
 );

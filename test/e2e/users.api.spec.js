@@ -123,6 +123,13 @@ describe('Users API', function () {
                         contributed_hours: 50,
                         why_join_hib: null,
                         yearly_days_pledged: null,
+                        yearly_donations_pledge: null,
+                        company:{
+                            id: 1,
+                            name: 'The Great Wizards Company',
+                            image_url: "http://thegreatwizards.org/logo",
+                            url: "http://thegreatwizards.org"
+                        },
                         projects: [{
                             id: 1,
                             name: 'Save the Middle Earth',
@@ -137,6 +144,7 @@ describe('Users API', function () {
                     });
                 });
         });
+
     });
 
     describe('Get user events', function () {
@@ -187,14 +195,16 @@ describe('Users API', function () {
                     .post(`/users/${userId}/hib-details`)
                     .send({
                         why_join_hib: "This is an awesome project !!!",
-                        yearly_days_pledged: 20
+                        yearly_days_pledged: 20,
+                        yearly_donations_pledge: 1500
                     })
                     .set('Content-Type', 'application/json')
                     .expect(200)
                     .then(res => {
                         expect(res.body).to.deep.equal({
                             why_join_hib: "This is an awesome project !!!",
-                            yearly_days_pledged: 20
+                            yearly_days_pledged: 20,
+                            yearly_donations_pledge: 1500
                         })
                     })
             });
