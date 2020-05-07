@@ -64,6 +64,14 @@ describe('Users API', function () {
                             title: "Great White Wizard"
                         });
                     });
+
+                await request(server)
+                    .get(`/users/${userId}/profile`)
+                    .set('Content-Type', 'application/json')
+                    .then(res => {
+                        expect(res.body.company).to.have.property('name', 'The Great Wizards Company');
+                        expect(res.body.title).to.be.equal('Great White Wizard');
+                    })
             });
 
             after(async function () {
@@ -97,6 +105,14 @@ describe('Users API', function () {
 
                         companyId = jobDetails.company_id;
                     });
+
+                await request(server)
+                    .get(`/users/${userId}/profile`)
+                    .set('Content-Type', 'application/json')
+                    .then(res => {
+                        expect(res.body.company).to.have.property('name', 'The Great Warriors Company');
+                        expect(res.body.title).to.be.equal('Great White Wizard');
+                    })
             });
 
             after(async function () {
