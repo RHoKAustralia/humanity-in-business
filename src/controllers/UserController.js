@@ -52,11 +52,11 @@ exports.updateJobDetails = async (req, res, next) => {
         }
 
         if(!req.body || !req.body.company_name) {
-            return next(new errs.BadRequestError('Missing request company name body property'));
+            return next(new errs.BadRequestError('Missing request company_name body property'));
         }
 
         if(!req.body || !req.body.title) {
-            return next(new errs.BadRequestError('Missing request company name body title'));
+            return next(new errs.BadRequestError('Missing request body title parameter'));
         }
 
         const response = await userService.updateJobDetails(req.params.userId, req.body.company_name, req.body.title);

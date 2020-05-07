@@ -75,7 +75,7 @@ class UserService {
     async changeCompany(userId, companyName) {
         let company = await companyService.findCompany({name: companyName});
         if (!company){
-            company = companyService.saveCompany({name: companyName});
+            company = await companyService.saveCompany({name: companyName});
         }
 
         await this.updateCompany(userId, company.id);
